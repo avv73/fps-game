@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
+Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 	: front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY)
 {
 	pos = position;
@@ -45,7 +45,7 @@ void Camera::ProcessKeyboard(CameraMovement direction, float deltaT)
 	}
 }
 
-void Camera::ProcessMouseMovement(float xOffset, float yOffset, bool constraintPitch = true)
+void Camera::ProcessMouseMovement(float xOffset, float yOffset, bool constraintPitch)
 {
 	xOffset *= mouseSensitivity;
 	yOffset *= mouseSensitivity;
@@ -62,6 +62,28 @@ void Camera::ProcessMouseMovement(float xOffset, float yOffset, bool constraintP
 	}
 
 	updateCameraVectors();
+}
+
+glm::mat4 Camera::GetProjectionMatrix()
+{
+	float aspectRatio = aspectX / aspectY;
+	return glm::perspective(camZoom, aspectRatio, nearPlane, farPlane);
+}
+
+void Camera::SetProjectionMatrix(float camZoom, int wSize, int hSize, float nearPlane, float farPlane)
+{
+	int r = gcm(wSize, hSize);
+	aspectX = wSize / r;
+	aspectY = hSize / r;
+
+	this->camZoom = camZoom;
+	this->nearPlane = nearPlane;
+	this->farPlane = farPlane;
+}
+
+int Camera::gcm(int a, int b)
+{
+	return (b == 0) ? a : gcm(b, a % b);
 }
 
 void Camera::updateCameraVectors()

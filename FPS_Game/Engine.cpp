@@ -10,8 +10,13 @@
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
+#include <glm\gtx\string_cast.hpp>
 
 #include <iostream>
+
+Engine::Engine(Player* pl)
+	: player(pl)
+{ }
 
 void Engine::Start()
 {
@@ -45,8 +50,10 @@ bool Engine::Init()
 		SDL_DisplayMode dMode;
 		SDL_GetCurrentDisplayMode(0, &dMode);
 
-		SDL_Window* gWindow = SDL_CreateWindow("FPS Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, dMode.w, dMode.h,
+		gWindow = SDL_CreateWindow("FPS Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, dMode.w, dMode.h,
 			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED);
+
+		player->camera->SetProjectionMatrix(glm::radians(45.0f), dMode.w, dMode.h, 0.1f, 100.0f);
 
 		if (gWindow == NULL)
 		{
@@ -95,10 +102,14 @@ bool Engine::InitGL()
 		printf("Error initializing OpenGL! %s\n", gluErrorString(error));
 	}
 
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.72f, 0.27f, 0.27f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	cubeShader.Load("cube_vertex.vert", "cube_fragment.frag");
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	return success;
 }
@@ -107,6 +118,8 @@ void Engine::CreateScene()
 {
 	// shaders, model & stuff..
 	// create scene graph...
+	GLuint VBO;
+	cube = CreateCube(1.0f, VBO);
 }
 
 void Engine::Update()
@@ -116,12 +129,12 @@ void Engine::Update()
 	bool quit = false;
 	while (!quit)
 	{
+		float currentFrame = SDL_GetTicks() / 1000.0f;
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		while (SDL_PollEvent(&e) != 0)
 		{
-			if (e.type == SDL_QUIT)
-			{
-				quit = true;
-			}
 			switch (e.type)
 			{
 			case SDL_QUIT:
@@ -134,12 +147,141 @@ void Engine::Update()
 				}
 				else
 				{
-
+					HandleKeyDown(e.key);
 				}
-
-
+				break;
+			case SDL_MOUSEMOTION:
+				currentMouseX = e.motion.x;
+				currentMouseY = e.motion.y;
+				HandleMouseMotion(e.motion);
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				HandleMouseClick(e.button);
 				break;
 			}
 		}
+
+		Render();
+
+		SDL_GL_SwapWindow(gWindow);
 	}
+
+	// close();
+}
+
+void Engine::Render()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glm::mat4 view = player->camera->GetViewMatrix();
+	glm::mat4 proj = player->camera->GetProjectionMatrix(glm::radians(45.0f), 16.0f / 3.0f, 0.1f, 100.0f);
+
+	glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	model = glm::translate(model, glm::vec3(0.0f, 0, 0));
+
+	if (deb)
+	{
+		std::cout << "VIEW: " << glm::to_string(view) << std::endl;
+		std::cout << "PROJ: " << glm::to_string(proj) << std::endl;
+		std::cout << "MODEL: " << glm::to_string(model) << std::endl;
+		deb = false;
+	}
+
+
+	cubeShader.setMat4("proj", proj);
+	cubeShader.setMat4("view", view);
+	cubeShader.setMat4("model", model);
+
+	DrawCube(cube);
+}
+
+void Engine::HandleKeyDown(const SDL_KeyboardEvent& key)
+{
+	switch (key.keysym.sym)
+	{
+	case SDLK_w:
+		player->Move(glm::vec3(0, 0, 1.0f), deltaTime);
+		break;
+	case SDLK_s:
+		player->Move(glm::vec3(0, 0, -1.0f), deltaTime);
+		break;
+	case SDLK_a:
+		player->Move(glm::vec3(-1.0f, 0, 0), deltaTime);
+		break;
+	case SDLK_d:
+		player->Move(glm::vec3(1.0f, 0, 0), deltaTime);
+		break;
+	case SDLK_SPACE:
+		player->Move(glm::vec3(0.0f, 1.0f, 0), deltaTime);
+		break;
+	}
+}
+
+void Engine::HandleMouseMotion(const SDL_MouseMotionEvent& motion)
+{
+	player->Look(glm::vec2(motion.x, motion.y));
+}
+
+void Engine::HandleMouseClick(const SDL_MouseButtonEvent& button)
+{
+	if (button.clicks != 1)
+		return;
+
+	switch (button.button)
+	{
+	case SDL_BUTTON_LEFT:
+		player->Shoot();
+		break;
+	case SDL_BUTTON_RIGHT:
+		break;
+	}
+}
+
+GLuint Engine::CreateCube(float width, GLuint& VBO)
+{
+	//each side of the cube with its own vertices to use different normals
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+		0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+
+		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f
+	};
+
+	GLuint VAO;
+	glGenBuffers(1, &VBO);
+	glGenVertexArrays(1, &VAO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0); //the data comes from the currently bound GL_ARRAY_BUFFER
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+	glBindVertexArray(0);
+
+	return VAO;
+}
+
+void Engine::DrawCube(GLuint vaoID)
+{
+	glUseProgram(cubeShader.ID);
+	glBindVertexArray(vaoID);
+
+	//glDrawElements uses the indices in the EBO to get to the vertices in the VBO
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawArrays(GL_TRIANGLES, 0, 6); //36
+
+	glBindVertexArray(0);
 }

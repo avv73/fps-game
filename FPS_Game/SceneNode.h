@@ -7,6 +7,6 @@ class SceneNode
 	// implement...
 };
 
-
+static SceneNode* SceneGraph;
 
 #endif

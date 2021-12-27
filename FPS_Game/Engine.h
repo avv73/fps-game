@@ -2,18 +2,51 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#include <GL\glew.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
+
 #include "SceneNode.h"
+#include "Player.h"
+#include "Shader.h"
 
 class Engine
 {
+public:
+	Engine(Player* pl);
+
 	void Start();
 private:
-	SceneNode* sceneGraph;
+	SDL_Window* gWindow;
+
+	float deltaTime = 0.0f;
+	float lastFrame = 0.0f;
+
+	Player* player;
+
+	float currentMouseX;
+	float currentMouseY;
 	
 	void Update();
+
 	bool Init();
 	bool InitGL();
+
 	void CreateScene();
+
+	void HandleKeyDown(const SDL_KeyboardEvent& key);
+	void HandleMouseMotion(const SDL_MouseMotionEvent& motion);
+	void HandleMouseClick(const SDL_MouseButtonEvent& button);
+
+	void Render();
+
+	// DEBUG
+	GLuint CreateCube(float width, GLuint& VBO);
+	void DrawCube(GLuint vaoID);
+	Shader cubeShader;
+	GLuint cube;
+
+	bool deb = true;
 };
 
 

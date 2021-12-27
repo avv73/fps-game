@@ -1,7 +1,7 @@
 #include "Collision.h"
 #include <math.h>
 
-bool Collision::RaySphere(float xc, float yc, float zc, float xd, float yd, float zd, float xs, float ys, float zs, float r, CollisionHit* hit = NULL)
+bool Collision::RaySphere(float xc, float yc, float zc, float xd, float yd, float zd, float xs, float ys, float zs, float r, CollisionHit* hit)
 {
 	float b = 2 * (xd * (xs - xc) + yd * (ys - yc) + zd * (zs - zc));
 	float c = xs * xs - 2 * xs * xc + xc * xc + ys * ys - 2 * ys * yc + yc * yc + zs * zs - 2 * zs * zc + zc * zc - r * r;
@@ -49,7 +49,7 @@ float Collision::PointDistanceSquare(const glm::vec3 c1, const glm::vec3 c2)
 }
 
 bool Collision::RayPlane(float nx, float ny, float nz, float x0, float y0, float z0, float xs, float ys, float zs, float xd, float yd, float zd,
-	const glm::vec3 p1, const glm::vec3 p2, const glm::vec3 p3, const glm::vec3 p4, CollisionHit* hit = NULL)
+	const glm::vec3 p1, const glm::vec3 p2, const glm::vec3 p3, const glm::vec3 p4, CollisionHit* hit)
 {
 	if ((xd * nx + yd * ny + zd * nz) == 0)
 	{
