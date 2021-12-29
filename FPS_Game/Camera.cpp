@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <stdio.h>
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 	: front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY)
@@ -22,19 +23,22 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 
 glm::mat4 Camera::GetViewMatrix()
 {
-	return glm::lookAt(pos, pos + front, up);
+	return glm::lookAt(pos, pos + front, up); //up
 }
 
-void Camera::ProcessKeyboard(CameraMovement direction, float deltaT)
+void Camera::ProcessKeyboard(CameraMovement direction, float delta)
 {
-	float vel = deltaT * movementSpeed;
+	float vel = delta * movementSpeed;
+	glm::vec3 frontL = glm::vec3(front);
+	frontL.y = 0;
+
 	switch (direction)
 	{
 	case FORWARD:
-		pos += front * vel;
+		pos += frontL * vel;
 		break;
 	case BACKWARD:
-		pos -= front * vel;
+		pos -= frontL * vel;
 		break;
 	case LEFT:
 		pos -= right * vel;
@@ -88,11 +92,11 @@ int Camera::gcm(int a, int b)
 
 void Camera::updateCameraVectors()
 {
-	glm::vec3 front;
-	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front.y = sin(glm::radians(pitch));
-	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front = glm::normalize(front);
+	glm::vec3 frontL;
+	frontL.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	frontL.y = sin(glm::radians(pitch));
+	frontL.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	front = glm::normalize(frontL);
 
 	right = glm::normalize(glm::cross(front, worldUp)); 
 	up = glm::normalize(glm::cross(right, front));

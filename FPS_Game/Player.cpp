@@ -8,28 +8,48 @@ Player::Player(Camera* camera)
 
 void Player::Move(glm::vec3 offset, float delta)
 {
-	if (offset.x == 1.0f)
+	for (; offset.x > 0; offset.x--)
+	{
+		camera->ProcessKeyboard(Camera::RIGHT, delta);
+	}
+
+	for (; offset.x < 0; offset.x++)
+	{
+		camera->ProcessKeyboard(Camera::LEFT, delta);
+	}
+
+	/*if (offset.x == 1.0f)
 	{
 		camera->ProcessKeyboard(Camera::RIGHT, delta);
 	}
 	else if (offset.x == -1.0f)
 	{
 		camera->ProcessKeyboard(Camera::LEFT, delta);
-	}
+	}*/
 
 	if (offset.y == 1.0f)
 	{
 		// jump?
 	}
+
+	for (; offset.z > 0; offset.z--)
+	{
+		camera->ProcessKeyboard(Camera::FORWARD, delta);
+	}
+
+	for (; offset.z < 0; offset.z++)
+	{
+		camera->ProcessKeyboard(Camera::BACKWARD, delta);
+	}
 	
-	if (offset.z == 1.0f)
+	/*if (offset.z == 1.0f)
 	{
 		camera->ProcessKeyboard(Camera::FORWARD, delta);
 	}
 	else if (offset.z == -1.0f)
 	{
 		camera->ProcessKeyboard(Camera::BACKWARD, delta);
-	}
+	}*/
 }
 
 void Player::Look(glm::vec2 motion)
@@ -42,7 +62,7 @@ void Player::Look(glm::vec2 motion)
 	}
 	else
 	{
-		camera->ProcessMouseMovement(motion.x - lastX, lastY - motion.y);
+		camera->ProcessMouseMovement(motion.x - lastX, lastY - motion.y, false);
 		lastX = motion.x;
 		lastY = motion.y;
 	}

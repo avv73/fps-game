@@ -22,19 +22,22 @@ private:
 	float deltaTime = 0.0f;
 	float lastFrame = 0.0f;
 
+	glm::vec3 actionVector = glm::vec3(0.0f);
+
 	Player* player;
 
 	float currentMouseX;
 	float currentMouseY;
 	
 	void Update();
+	void UpdateActions();
 
 	bool Init();
 	bool InitGL();
 
 	void CreateScene();
 
-	void HandleKeyDown(const SDL_KeyboardEvent& key);
+	void HandleKeyDown(const Uint8* keystates);
 	void HandleMouseMotion(const SDL_MouseMotionEvent& motion);
 	void HandleMouseClick(const SDL_MouseButtonEvent& button);
 

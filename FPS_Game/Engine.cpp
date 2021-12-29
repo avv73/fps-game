@@ -140,16 +140,6 @@ void Engine::Update()
 			case SDL_QUIT:
 				quit = true;
 				break;
-			case SDL_KEYDOWN:
-				if (e.key.keysym.sym == SDLK_ESCAPE)
-				{
-					quit = true;
-				}
-				else
-				{
-					HandleKeyDown(e.key);
-				}
-				break;
 			case SDL_MOUSEMOTION:
 				currentMouseX = e.motion.x;
 				currentMouseY = e.motion.y;
@@ -160,6 +150,13 @@ void Engine::Update()
 				break;
 			}
 		}
+
+		int count;
+
+		const Uint8* keystates = SDL_GetKeyboardState(&count);
+		HandleKeyDown(keystates);
+
+		UpdateActions();
 
 		Render();
 
@@ -174,18 +171,10 @@ void Engine::Render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = player->camera->GetViewMatrix();
-	glm::mat4 proj = player->camera->GetProjectionMatrix(glm::radians(45.0f), 16.0f / 3.0f, 0.1f, 100.0f);
+	glm::mat4 proj = player->camera->GetProjectionMatrix();
 
-	glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-	model = glm::translate(model, glm::vec3(0.0f, 0, 0));
-
-	if (deb)
-	{
-		std::cout << "VIEW: " << glm::to_string(view) << std::endl;
-		std::cout << "PROJ: " << glm::to_string(proj) << std::endl;
-		std::cout << "MODEL: " << glm::to_string(model) << std::endl;
-		deb = false;
-	}
+	glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+	model = glm::translate(model, glm::vec3(2.0f, 0, -2));
 
 
 	cubeShader.setMat4("proj", proj);
@@ -195,26 +184,34 @@ void Engine::Render()
 	DrawCube(cube);
 }
 
-void Engine::HandleKeyDown(const SDL_KeyboardEvent& key)
+void Engine::HandleKeyDown(const Uint8* keystates)
 {
-	switch (key.keysym.sym)
+	if (keystates[SDL_GetScancodeFromKey(SDLK_w)])
 	{
-	case SDLK_w:
-		player->Move(glm::vec3(0, 0, 1.0f), deltaTime);
-		break;
-	case SDLK_s:
-		player->Move(glm::vec3(0, 0, -1.0f), deltaTime);
-		break;
-	case SDLK_a:
-		player->Move(glm::vec3(-1.0f, 0, 0), deltaTime);
-		break;
-	case SDLK_d:
-		player->Move(glm::vec3(1.0f, 0, 0), deltaTime);
-		break;
-	case SDLK_SPACE:
-		player->Move(glm::vec3(0.0f, 1.0f, 0), deltaTime);
-		break;
+		actionVector.z += 1.0f;
 	}
+	if (keystates[SDL_GetScancodeFromKey(SDLK_s)])
+	{
+		actionVector.z -= 1.0f;
+	}
+	if (keystates[SDL_GetScancodeFromKey(SDLK_a)])
+	{
+		actionVector.x -= 1.0f;
+	}
+	if (keystates[SDL_GetScancodeFromKey(SDLK_d)])
+	{
+		actionVector.x += 1.0f;
+	}
+	if (keystates[SDL_GetScancodeFromKey(SDLK_SPACE)])
+	{
+		actionVector.y += 1.0f;
+	}
+}
+
+void Engine::UpdateActions()
+{
+	player->Move(actionVector, deltaTime);
+	actionVector = glm::vec3(0.0f);
 }
 
 void Engine::HandleMouseMotion(const SDL_MouseMotionEvent& motion)
@@ -239,15 +236,50 @@ void Engine::HandleMouseClick(const SDL_MouseButtonEvent& button)
 
 GLuint Engine::CreateCube(float width, GLuint& VBO)
 {
-	//each side of the cube with its own vertices to use different normals
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-		0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+
+
 	};
 
 	GLuint VAO;
@@ -281,7 +313,7 @@ void Engine::DrawCube(GLuint vaoID)
 
 	//glDrawElements uses the indices in the EBO to get to the vertices in the VBO
 	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glDrawArrays(GL_TRIANGLES, 0, 6); //36
+	glDrawArrays(GL_TRIANGLES, 0, 36); //36
 
 	glBindVertexArray(0);
 }
