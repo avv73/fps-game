@@ -35,6 +35,8 @@ private:
 	bool Init();
 	bool InitGL();
 
+	void Close();
+
 	void CreateScene();
 
 	void HandleKeyDown(const Uint8* keystates);

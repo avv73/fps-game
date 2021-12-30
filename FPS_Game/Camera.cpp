@@ -26,9 +26,9 @@ glm::mat4 Camera::GetViewMatrix()
 	return glm::lookAt(pos, pos + front, up); //up
 }
 
-void Camera::ProcessKeyboard(CameraMovement direction, float delta)
+void Camera::ProcessKeyboard(CameraMovement direction, float delta, int quantor)
 {
-	float vel = delta * movementSpeed;
+	float vel = delta * movementSpeed * quantor;
 	glm::vec3 frontL = glm::vec3(front);
 	frontL.y = 0;
 
@@ -36,12 +36,6 @@ void Camera::ProcessKeyboard(CameraMovement direction, float delta)
 	{
 	case FORWARD:
 		pos += frontL * vel;
-		break;
-	case BACKWARD:
-		pos -= frontL * vel;
-		break;
-	case LEFT:
-		pos -= right * vel;
 		break;
 	case RIGHT:
 		pos += right * vel;

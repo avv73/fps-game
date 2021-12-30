@@ -206,6 +206,10 @@ void Engine::HandleKeyDown(const Uint8* keystates)
 	{
 		actionVector.y += 1.0f;
 	}
+	if (keystates[SDL_GetScancodeFromKey(SDLK_ESCAPE)])
+	{
+		Close();
+	}
 }
 
 void Engine::UpdateActions()
@@ -232,6 +236,11 @@ void Engine::HandleMouseClick(const SDL_MouseButtonEvent& button)
 	case SDL_BUTTON_RIGHT:
 		break;
 	}
+}
+
+void Engine::Close()
+{
+	// close program..
 }
 
 GLuint Engine::CreateCube(float width, GLuint& VBO)

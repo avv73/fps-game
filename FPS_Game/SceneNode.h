@@ -1,12 +1,76 @@
 #pragma once
+#include <glm/glm.hpp>
+#include <vector>
+#include "Model.h"
+#include "Shader.h"
+
 #ifndef SCENENODE_H
 #define SCENENODE_H
 
 class SceneNode
 {
-	// implement...
+public:
+	SceneNode();
+	SceneNode(const std::string& name);
+
+	virtual void Visualize(glm::mat4 transform) = 0;
+	virtual void Shoot(glm::vec3 orig, glm::vec3 dir) = 0;
+
+	const std::string NodeName;
 };
 
-static SceneNode* SceneGraph;
+static SceneNode* SceneGraph = NULL;
+
+class GroupNode : SceneNode
+{
+public:
+	GroupNode();
+	GroupNode(const std::string& name);
+
+	void AddNode(SceneNode* sn);
+	void RemoveNode(SceneNode* sn);
+
+	void Visualize(glm::mat4 transform); // override
+	void Shoot(glm::vec3 orig, glm::vec3 dir); // override
+protected:
+	std::vector<SceneNode*> groups;
+};
+
+class TransformNode : GroupNode
+{
+public:
+	TransformNode();
+	TransformNode(const std::string& name);
+
+	void Rotate(glm::vec3 rotV, float angle);
+	void Scale(glm::vec3 scV);
+	void Translate(glm::vec3 trV);
+
+	void SetTransform(glm::mat4 tr);
+
+	void Visualize(glm::mat4 transform); // override
+	void Shoot(glm::vec3 orig, glm::vec3 dir); // override
+private:
+	glm::mat4 transform;
+};
+
+class ModelNode : SceneNode
+{
+public:
+	ModelNode();
+	ModelNode(const std::string& name);
+	ModelNode(const std::string& name, const std::string& path);
+
+	void SetShader(Shader* sd);
+
+	void Visualize(glm::mat4 transform); // override
+	void Shoot(glm::vec3 orig, glm::vec3 dir); // override
+private:
+	Model m;
+	Shader* sdr;
+	//BoundingSphere* sphere = NULL;
+
+	void LoadModelFromFile(const std::string& path);
+};
 
 #endif

@@ -7,7 +7,7 @@
 
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 1.0f;
+const float SPEED = 0.8f;
 const float SENSITIVITY = 0.1f;
 
 class Camera
@@ -15,8 +15,6 @@ class Camera
 public:
 	enum CameraMovement {
 		FORWARD,
-		BACKWARD,
-		LEFT,
 		RIGHT
 	};
 
@@ -44,7 +42,7 @@ public:
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();
 
-	void ProcessKeyboard(CameraMovement camMov, float delta);
+	void ProcessKeyboard(CameraMovement camMov, float delta, int quantor);
 	void ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch = true);
 	
 	void SetProjectionMatrix(float camZoom, int wSize, int hSize, float nearPlane, float farPlane);
