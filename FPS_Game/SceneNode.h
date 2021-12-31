@@ -21,7 +21,7 @@ public:
 
 static SceneNode* SceneGraph = NULL;
 
-class GroupNode : SceneNode
+class GroupNode : public SceneNode
 {
 public:
 	GroupNode();
@@ -36,7 +36,7 @@ protected:
 	std::vector<SceneNode*> groups;
 };
 
-class TransformNode : GroupNode
+class TransformNode : public GroupNode
 {
 public:
 	TransformNode();
@@ -54,7 +54,7 @@ private:
 	glm::mat4 transform;
 };
 
-class ModelNode : SceneNode
+class ModelNode : public SceneNode
 {
 public:
 	ModelNode();

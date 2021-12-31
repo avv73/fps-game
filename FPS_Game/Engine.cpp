@@ -107,7 +107,7 @@ bool Engine::InitGL()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	cubeShader.Load("cube_vertex.vert", "cube_fragment.frag");
+	//cubeShader.Load("cube_vertex.vert", "cube_fragment.frag");
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -118,8 +118,19 @@ void Engine::CreateScene()
 {
 	// shaders, model & stuff..
 	// create scene graph...
-	GLuint VBO;
-	cube = CreateCube(1.0f, VBO);
+	//GLuint VBO;
+	//cube = CreateCube(1.0f, VBO);
+
+	GroupNode* rootNode = new GroupNode("root");
+	TransformNode* trC = new TransformNode("cube_trans");
+
+	rootNode->AddNode(trC);
+
+	trC->Translate(glm::vec3(1.0f, 0.0f, -3.5f));
+
+	ModelNode* cube = new ModelNode("cube", "./models/cube/cube_test.obj");
+
+	trC->AddNode(cube);
 }
 
 void Engine::Update()
