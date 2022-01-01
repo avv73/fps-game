@@ -141,9 +141,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="cube_fragment.frag" />
-    <None Include="cube_vertex.vert" />
     <None Include="packages.config" />
+    <None Include="shaders\cube_test.frag" />
+    <None Include="shaders\cube_test.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -167,6 +167,7 @@
     <ClCompile Include="CollisionSphere.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="ShaderLibrary.cpp" />

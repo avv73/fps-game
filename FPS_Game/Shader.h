@@ -14,12 +14,20 @@ class Shader
 {
 public:
 	unsigned int ID;
+	std::string Name;
 	// constructor generates the shader on the fly
 	// ------------------------------------------------------------------------
 	Shader()
 	{
 		ID = 0;
+		Name = "";
 	}
+
+	Shader(const std::string& n)
+	{
+		Name = n;
+	}
+
 
 	void Load(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
 	{

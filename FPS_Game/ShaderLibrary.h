@@ -9,16 +9,21 @@
 class ShaderLibrary
 {
 public:
-	ShaderLibrary(const std::string& shaderFolder);
-
 	bool LoadShaders();
 	void UnloadShaders();
 
+	void SetPVGlobal(const glm::mat4& proj, const glm::mat4& view);
+	void SetShaderPath(const std::string& path);
+
 	Shader* GetShader(const std::string& shaderName);
+
+	static ShaderLibrary* GetInstance();
 private:
+	ShaderLibrary();
+
 	std::vector<Shader*> loadedShaders;
 	std::string shadersPath;
-};
 
-static ShaderLibrary* LoadedShaders = NULL;
+	static ShaderLibrary* libInstance;
+};
 #endif

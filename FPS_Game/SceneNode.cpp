@@ -1,4 +1,5 @@
 #include "SceneNode.h"
+#include "ShaderLibrary.h"
 
 // ===SceneNode===
 SceneNode::SceneNode() : NodeName("") 
@@ -113,11 +114,17 @@ ModelNode::ModelNode(const std::string& name) : SceneNode(name) { }
 ModelNode::ModelNode(const std::string& name, const std::string& path) : SceneNode(name)
 {
 	LoadModelFromFile(path);
+	AutoLoadShader(name);
 }
 
 void ModelNode::SetShader(Shader* sd)
 {
 	this->sdr = sd;
+}
+
+void ModelNode::AutoLoadShader(const std::string& name)
+{
+	this->sdr = ShaderLibrary::GetInstance()->GetShader(name);
 }
 
 void ModelNode::LoadModelFromFile(const std::string& path)

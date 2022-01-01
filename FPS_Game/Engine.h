@@ -48,8 +48,8 @@ private:
 	// DEBUG
 	GLuint CreateCube(float width, GLuint& VBO);
 	void DrawCube(GLuint vaoID);
-	Shader cubeShader;
-	GLuint cube;
+	//Shader cubeShader;
+	//GLuint cube;
 
 	bool deb = true;
 };

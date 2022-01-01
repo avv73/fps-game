@@ -19,7 +19,7 @@ public:
 	const std::string NodeName;
 };
 
-static SceneNode* SceneGraph = NULL;
+extern SceneNode* SceneGraph;
 
 class GroupNode : public SceneNode
 {
@@ -71,6 +71,8 @@ private:
 	//BoundingSphere* sphere = NULL;
 
 	void LoadModelFromFile(const std::string& path);
+
+	void AutoLoadShader(const std::string& name);
 };
 
 #endif

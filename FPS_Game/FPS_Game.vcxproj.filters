@@ -15,10 +15,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="cube_vertex.vert">
+    <None Include="shaders\cube_test.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="cube_fragment.frag">
+    <None Include="shaders\cube_test.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
@@ -89,6 +89,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ShaderLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

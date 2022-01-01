@@ -13,6 +13,7 @@
 #include <glm\gtx\string_cast.hpp>
 
 #include <iostream>
+#include "ShaderLibrary.h"
 
 Engine::Engine(Player* pl)
 	: player(pl)
@@ -83,6 +84,16 @@ bool Engine::Init()
 				}
 			}
 		}
+
+		ShaderLibrary* shLib = ShaderLibrary::GetInstance();
+		shLib->SetShaderPath("./shaders/");
+
+		if (!shLib->LoadShaders())
+		{
+			printf("Error loading shaders!");
+			success = false;
+		}
+
 	}
 
 	return success;
@@ -128,7 +139,7 @@ void Engine::CreateScene()
 
 	trC->Translate(glm::vec3(1.0f, 0.0f, -3.5f));
 
-	ModelNode* cube = new ModelNode("cube", "./models/cube/cube_test.obj");
+	ModelNode* cube = new ModelNode("cube_test", "./models/cube/cube_test.obj");
 
 	trC->AddNode(cube);
 }
@@ -184,15 +195,9 @@ void Engine::Render()
 	glm::mat4 view = player->camera->GetViewMatrix();
 	glm::mat4 proj = player->camera->GetProjectionMatrix();
 
-	glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
-	model = glm::translate(model, glm::vec3(2.0f, 0, -2));
+	ShaderLibrary::GetInstance()->SetPVGlobal(proj, view);
 
-
-	cubeShader.setMat4("proj", proj);
-	cubeShader.setMat4("view", view);
-	cubeShader.setMat4("model", model);
-
-	DrawCube(cube);
+	SceneGraph->Visualize(glm::mat4(1.0f));
 }
 
 void Engine::HandleKeyDown(const Uint8* keystates)
@@ -251,6 +256,7 @@ void Engine::HandleMouseClick(const SDL_MouseButtonEvent& button)
 
 void Engine::Close()
 {
+	ShaderLibrary::GetInstance()->UnloadShaders();
 	// close program..
 }
 
@@ -328,7 +334,7 @@ GLuint Engine::CreateCube(float width, GLuint& VBO)
 
 void Engine::DrawCube(GLuint vaoID)
 {
-	glUseProgram(cubeShader.ID);
+	//glUseProgram(cubeShader.ID);
 	glBindVertexArray(vaoID);
 
 	//glDrawElements uses the indices in the EBO to get to the vertices in the VBO
