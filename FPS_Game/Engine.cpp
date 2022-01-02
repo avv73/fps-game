@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include "ShaderLibrary.h"
+#include "GLErrorLogger.h"
 
 Engine::Engine(Player* pl)
 	: player(pl)
@@ -141,7 +142,9 @@ void Engine::CreateScene()
 
 	ModelNode* cube = new ModelNode("cube_test", "./models/cube/cube_test.obj");
 
-	trC->AddNode(cube);
+	rootNode->AddNode(cube);
+
+	cubeDeb = cube;
 }
 
 void Engine::Update()
@@ -196,8 +199,12 @@ void Engine::Render()
 	glm::mat4 proj = player->camera->GetProjectionMatrix();
 
 	ShaderLibrary::GetInstance()->SetPVGlobal(proj, view);
+	//ShaderLibrary::GetInstance()->SetGlobalLight(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), player->camera->pos);
 
-	SceneGraph->Visualize(glm::mat4(1.0f));
+	//SceneGraph->Visualize(glm::mat4(1.0f));
+	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, -3.0f));
+
+	cubeDeb->Visualize(model);
 }
 
 void Engine::HandleKeyDown(const Uint8* keystates)

@@ -1,6 +1,8 @@
 #include "SceneNode.h"
 #include "ShaderLibrary.h"
 
+SceneNode* SceneGraph = NULL;
+
 // ===SceneNode===
 SceneNode::SceneNode() : NodeName("") 
 { 
@@ -43,15 +45,15 @@ void GroupNode::RemoveNode(SceneNode* sn)
 	}
 }
 
-void GroupNode::Visualize(glm::mat4 tr) // override
+void GroupNode::Visualize(const glm::mat4& transform) // override
 {
 	for (auto it = groups.begin(); it != groups.end(); ++it)
 	{
-		(*it)->Visualize(tr);
+		(*it)->Visualize(transform);
 	}
 }
 
-void GroupNode::Shoot(glm::vec3 orig, glm::vec3 dir) // override
+void GroupNode::Shoot(const glm::vec3& orig, const glm::vec3& dir) // override
 {
 	for (auto it = groups.begin(); it != groups.end(); ++it)
 	{
@@ -90,10 +92,10 @@ void TransformNode::SetTransform(glm::mat4 tr)
 	transform = tr;
 }
 
-void TransformNode::Visualize(glm::mat4 transform) // override
+void TransformNode::Visualize(const glm::mat4& transform) // override
 {
 	// stack matrices
-	glm::mat4 stackedTr = transform * this->transform;
+	glm::mat4 stackedTr = this->transform * transform;
 
 	for (auto it = groups.begin(); it != groups.end(); ++it)
 	{
@@ -101,7 +103,7 @@ void TransformNode::Visualize(glm::mat4 transform) // override
 	}
 }
 
-void TransformNode::Shoot(glm::vec3 orig, glm::vec3 dir) // override
+void TransformNode::Shoot(const glm::vec3& orig, const glm::vec3& dir) // override
 {
 	GroupNode::Shoot(orig, dir);
 }
@@ -133,7 +135,7 @@ void ModelNode::LoadModelFromFile(const std::string& path)
 	// create sphere
 }
 
-void ModelNode::Visualize(glm::mat4 transform)
+void ModelNode::Visualize(const glm::mat4& transform)
 {
 	sdr->setMat4("model", transform);
 	glm::mat3 normalMat = glm::transpose(glm::inverse(transform));
@@ -142,7 +144,7 @@ void ModelNode::Visualize(glm::mat4 transform)
 	m.Draw(*sdr);
 }
 
-void ModelNode::Shoot(glm::vec3 orig, glm::vec3 dir)
+void ModelNode::Shoot(const glm::vec3& orig, const glm::vec3& dir)
 {
 	// traverse intersection...
 }

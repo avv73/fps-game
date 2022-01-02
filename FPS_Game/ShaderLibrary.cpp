@@ -1,6 +1,7 @@
 #include "ShaderLibrary.h"
 #include <iostream>
 #include <filesystem>
+#include "GLErrorLogger.h"
 namespace fs = std::filesystem;
 
 ShaderLibrary* ShaderLibrary::libInstance = 0;
@@ -77,7 +78,18 @@ void ShaderLibrary::SetPVGlobal(const glm::mat4& proj, const glm::mat4& view)
 {
 	for (auto it = loadedShaders.begin(); it != loadedShaders.end(); ++it)
 	{
+		(*it)->use();
 		(*it)->setMat4("proj", proj);
 		(*it)->setMat4("view", view);
+	}
+}
+
+void ShaderLibrary::SetGlobalLight(const glm::vec3& pos, const glm::vec3& diffuse, const glm::vec3& viewPos)
+{
+	for (auto it = loadedShaders.begin(); it != loadedShaders.end(); ++it)
+	{
+		(*it)->setVec3("light.diffuse", diffuse);
+		(*it)->setVec3("light.position", pos);
+		(*it)->setVec3("viewPos", viewPos);
 	}
 }

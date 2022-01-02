@@ -13,6 +13,8 @@ public:
 	void UnloadShaders();
 
 	void SetPVGlobal(const glm::mat4& proj, const glm::mat4& view);
+	void SetGlobalLight(const glm::vec3& pos, const glm::vec3& diffuse, const glm::vec3& viewPos);
+
 	void SetShaderPath(const std::string& path);
 
 	Shader* GetShader(const std::string& shaderName);

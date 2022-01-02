@@ -13,13 +13,13 @@ public:
 	SceneNode();
 	SceneNode(const std::string& name);
 
-	virtual void Visualize(glm::mat4 transform) = 0;
-	virtual void Shoot(glm::vec3 orig, glm::vec3 dir) = 0;
+	virtual void Visualize(const glm::mat4& transform) = 0;
+	virtual void Shoot(const glm::vec3& orig, const glm::vec3& dir) = 0;
 
 	const std::string NodeName;
 };
 
-extern SceneNode* SceneGraph;
+extern SceneNode* SceneGraph; // ?? first init in SceneNode.cpp ?
 
 class GroupNode : public SceneNode
 {
@@ -30,8 +30,8 @@ public:
 	void AddNode(SceneNode* sn);
 	void RemoveNode(SceneNode* sn);
 
-	void Visualize(glm::mat4 transform); // override
-	void Shoot(glm::vec3 orig, glm::vec3 dir); // override
+	void Visualize(const glm::mat4& transform); // override
+	void Shoot(const glm::vec3& orig, const glm::vec3& dir); // override
 protected:
 	std::vector<SceneNode*> groups;
 };
@@ -48,8 +48,8 @@ public:
 
 	void SetTransform(glm::mat4 tr);
 
-	void Visualize(glm::mat4 transform); // override
-	void Shoot(glm::vec3 orig, glm::vec3 dir); // override
+	void Visualize(const glm::mat4& transform); // override
+	void Shoot(const glm::vec3& orig, const glm::vec3& dir); // override
 private:
 	glm::mat4 transform;
 };
@@ -63,8 +63,9 @@ public:
 
 	void SetShader(Shader* sd);
 
-	void Visualize(glm::mat4 transform); // override
-	void Shoot(glm::vec3 orig, glm::vec3 dir); // override
+	void Visualize(const glm::mat4& transform); // override
+	void Shoot(const glm::vec3& orig, const glm::vec3& dir); // override
+
 private:
 	Model m;
 	Shader* sdr;

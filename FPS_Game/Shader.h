@@ -10,6 +10,8 @@
 #include <sstream>
 #include <iostream>
 
+#include "GLErrorLogger.h"
+
 class Shader
 {
 public:
@@ -124,58 +126,106 @@ public:
 	void setBool(const std::string& name, bool value) const
 	{
 		glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setBool shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	// ------------------------------------------------------------------------
 	void setInt(const std::string& name, int value) const
 	{
 		glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setInt shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	// ------------------------------------------------------------------------
 	void setFloat(const std::string& name, float value) const
 	{
 		glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setFloat shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	// ------------------------------------------------------------------------
 	void setVec2(const std::string& name, const glm::vec2& value) const
 	{
 		glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setVec2 shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	void setVec2(const std::string& name, float x, float y) const
 	{
 		glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setVec2 shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	// ------------------------------------------------------------------------
 	void setVec3(const std::string& name, const glm::vec3& value) const
 	{
 		glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setVec3 shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	void setVec3(const std::string& name, float x, float y, float z) const
 	{
 		glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setVec3 shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	// ------------------------------------------------------------------------
 	void setVec4(const std::string& name, const glm::vec4& value) const
 	{
 		glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setVec4 shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	void setVec4(const std::string& name, float x, float y, float z, float w)
 	{
 		glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setVec4 shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	// ------------------------------------------------------------------------
 	void setMat2(const std::string& name, const glm::mat2& mat) const
 	{
 		glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setMat2 shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	// ------------------------------------------------------------------------
 	void setMat3(const std::string& name, const glm::mat3& mat) const
 	{
-		glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+		glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]); 
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setMat3 shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 	// ------------------------------------------------------------------------
 	void setMat4(const std::string& name, const glm::mat4& mat) const
 	{
 		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+		if (!GLErrorLogger::CheckGL())
+		{
+			printf("Error setMat4 shd Name %s for name %s", this->Name.c_str(), name.c_str());
+		}
 	}
 
 private:

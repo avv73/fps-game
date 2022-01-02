@@ -51,6 +51,8 @@ private:
 	//Shader cubeShader;
 	//GLuint cube;
 
+	ModelNode* cubeDeb;
+
 	bool deb = true;
 };
 
