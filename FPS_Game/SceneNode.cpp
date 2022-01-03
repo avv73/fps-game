@@ -74,7 +74,7 @@ TransformNode::TransformNode(const std::string& tr) : GroupNode(tr)
 
 void TransformNode::Rotate(glm::vec3 rtV, float angle)
 {
-	transform = glm::rotate(transform, angle, rtV);
+	transform = glm::rotate(transform, glm::radians(angle), rtV);
 }
 
 void TransformNode::Scale(glm::vec3 scV)

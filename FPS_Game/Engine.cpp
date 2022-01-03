@@ -135,16 +135,22 @@ void Engine::CreateScene()
 
 	GroupNode* rootNode = new GroupNode("root");
 	TransformNode* trC = new TransformNode("cube_trans");
+	TransformNode* trC2 = new TransformNode("cube_trans2");
 
 	rootNode->AddNode(trC);
+	rootNode->AddNode(trC2);
 
-	trC->Translate(glm::vec3(1.0f, 0.0f, -3.5f));
+	trC->Translate(glm::vec3(1.0f, 0.0f, -3.0f));
+	trC2->Translate(glm::vec3(1.0f, 4.0f, -4.0f));
 
 	ModelNode* cube = new ModelNode("cube_test", "./models/cube/cube_test.obj");
 
-	rootNode->AddNode(cube);
+	trC->AddNode(cube);
+	trC2->AddNode(cube);
 
-	cubeDeb = cube;
+	rootNode->AddNode(trC);
+	rootNode->AddNode(trC2);
+	//cubeDeb = cube;
 }
 
 void Engine::Update()
@@ -199,12 +205,9 @@ void Engine::Render()
 	glm::mat4 proj = player->camera->GetProjectionMatrix();
 
 	ShaderLibrary::GetInstance()->SetPVGlobal(proj, view);
-	//ShaderLibrary::GetInstance()->SetGlobalLight(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), player->camera->pos);
+	ShaderLibrary::GetInstance()->SetGlobalLight(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), player->camera->pos);
 
-	//SceneGraph->Visualize(glm::mat4(1.0f));
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, -3.0f));
-
-	cubeDeb->Visualize(model);
+	SceneGraph->Visualize(glm::mat4(1.0f));
 }
 
 void Engine::HandleKeyDown(const Uint8* keystates)
