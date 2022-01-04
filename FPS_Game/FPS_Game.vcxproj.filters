@@ -21,6 +21,12 @@
     <None Include="shaders\cube_test.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shaders\skybox.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\skybox.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionSphere.h">
@@ -65,6 +71,9 @@
     <ClInclude Include="GLErrorLogger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CubemapNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionSphere.cpp">
@@ -98,6 +107,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLErrorLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CubemapNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

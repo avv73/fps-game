@@ -144,12 +144,15 @@
     <None Include="packages.config" />
     <None Include="shaders\cube_test.frag" />
     <None Include="shaders\cube_test.vert" />
+    <None Include="shaders\skybox.frag" />
+    <None Include="shaders\skybox.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionPlane.h" />
     <ClInclude Include="CollisionSphere.h" />
+    <ClInclude Include="CubemapNode.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GLErrorLogger.h" />
     <ClInclude Include="LevelLoader.h" />
@@ -166,6 +169,7 @@
     <ClCompile Include="ColisionPlane.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionSphere.cpp" />
+    <ClCompile Include="CubemapNode.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GLErrorLogger.cpp" />
     <ClCompile Include="Main.cpp" />
