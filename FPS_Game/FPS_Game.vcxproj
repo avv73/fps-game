@@ -142,8 +142,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shaders\cube_test.frag" />
-    <None Include="shaders\cube_test.vert" />
+    <None Include="shaders\grass.frag" />
+    <None Include="shaders\grass.vert" />
     <None Include="shaders\skybox.frag" />
     <None Include="shaders\skybox.vert" />
   </ItemGroup>

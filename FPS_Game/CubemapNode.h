@@ -2,15 +2,15 @@
 #ifndef CUBEMAPNODE_H
 #define CUBEMAP_H
 
+#include "stb_image.h"
 #include "SceneNode.h"
 
-class CubemapNode : public ModelNode
+class CubemapNode
 {
 public:
 	CubemapNode(const std::string& top, const std::string& left, const std::string& right, const std::string& bottom, const std::string& front, const std::string& back);
 
-	void Visualize(const glm::mat4& transform); // override
-	void Shoot(const glm::vec3& orig, const glm::vec3& dir); // override
+	void Visualize(); // override
 private:
 	unsigned int textureID;
 	vector<std::string> faces;

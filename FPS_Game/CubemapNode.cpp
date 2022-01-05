@@ -1,10 +1,7 @@
 #include "CubemapNode.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
 #include "ShaderLibrary.h"
 
 CubemapNode::CubemapNode(const std::string& top, const std::string& left, const std::string& right, const std::string& bottom, const std::string& front, const std::string& back)
-	: ModelNode("Skybox")
 {
 	faces.push_back(right);
 	faces.push_back(left);
@@ -14,15 +11,16 @@ CubemapNode::CubemapNode(const std::string& top, const std::string& left, const 
 	faces.push_back(back);
 
     GLuint vbo;
+
 	LoadCubemap();
+    CreateCube(vbo);
+
     skyboxShader = ShaderLibrary::GetInstance()->GetShader("skybox");
 }
 
-void CubemapNode::Shoot(const glm::vec3& orig, const glm::vec3& dir)
-{ }
-
-void CubemapNode::Visualize(const glm::mat4& transform)
+void CubemapNode::Visualize()
 {
+    glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_FALSE);
     skyboxShader->use();
     glBindVertexArray(VAO);
@@ -33,6 +31,7 @@ void CubemapNode::Visualize(const glm::mat4& transform)
     glBindVertexArray(0);
 
     glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS);
 }
 
 void CubemapNode::LoadCubemap()

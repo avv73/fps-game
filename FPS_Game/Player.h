@@ -17,9 +17,6 @@ public:
 	void Shoot();
 
 private:
-	bool firstMouse = true;
-	float lastX = 0.0f;
-	float lastY = 0.0f;
 };
 
 

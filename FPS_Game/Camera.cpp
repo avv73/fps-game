@@ -77,6 +77,9 @@ void Camera::SetProjectionMatrix(float camZoom, int wSize, int hSize, float near
 	this->camZoom = camZoom;
 	this->nearPlane = nearPlane;
 	this->farPlane = farPlane;
+
+	this->wSize = wSize;
+	this->hSize = hSize;
 }
 
 int Camera::gcm(int a, int b)

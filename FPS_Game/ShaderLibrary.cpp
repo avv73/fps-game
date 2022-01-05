@@ -74,12 +74,18 @@ void ShaderLibrary::SetShaderPath(const std::string& path)
 	shadersPath = path;
 }
 
-void ShaderLibrary::SetPVGlobal(const glm::mat4& proj, const glm::mat4& view)
+void ShaderLibrary::SetPVGlobal(const glm::mat4& proj, glm::mat4& view)
 {
 	for (auto it = loadedShaders.begin(); it != loadedShaders.end(); ++it)
 	{
 		(*it)->use();
 		(*it)->setMat4("proj", proj);
+
+		if ((*it)->Name == "skybox")
+		{
+			view = glm::mat4(glm::mat3(view));
+		}
+
 		(*it)->setMat4("view", view);
 	}
 }
@@ -88,6 +94,7 @@ void ShaderLibrary::SetGlobalLight(const glm::vec3& pos, const glm::vec3& diffus
 {
 	for (auto it = loadedShaders.begin(); it != loadedShaders.end(); ++it)
 	{
+		(*it)->use();
 		(*it)->setVec3("light.diffuse", diffuse);
 		(*it)->setVec3("light.position", pos);
 		(*it)->setVec3("viewPos", viewPos);

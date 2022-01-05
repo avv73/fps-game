@@ -56,6 +56,9 @@ bool Engine::Init()
 			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED);
 
 		player->camera->SetProjectionMatrix(glm::radians(45.0f), dMode.w, dMode.h, 0.1f, 100.0f);
+		
+		SDL_SetRelativeMouseMode(SDL_TRUE);
+		SDL_WarpMouseInWindow(gWindow, dMode.w / 2, dMode.h / 2);
 
 		if (gWindow == NULL)
 		{
@@ -134,23 +137,21 @@ void Engine::CreateScene()
 	//cube = CreateCube(1.0f, VBO);
 
 	GroupNode* rootNode = new GroupNode("root");
-	TransformNode* trC = new TransformNode("cube_trans");
-	TransformNode* trC2 = new TransformNode("cube_trans2");
+	TransformNode* trC = new TransformNode("grass_trans");
 
 	rootNode->AddNode(trC);
-	rootNode->AddNode(trC2);
 
-	trC->Translate(glm::vec3(1.0f, 0.0f, -3.0f));
-	trC2->Translate(glm::vec3(1.0f, 4.0f, -4.0f));
+	trC->Translate(glm::vec3(0.0f, -5.0f, 0.0f));
+	trC->Scale(glm::vec3(10.0f, 0.1f, 10.0f));
 
-	ModelNode* cube = new ModelNode("cube_test", "./models/cube/cube_test.obj");
+	ModelNode* cube = new ModelNode("grass", "./models/cube/grass.obj");
 
 	trC->AddNode(cube);
-	trC2->AddNode(cube);
 
 	rootNode->AddNode(trC);
-	rootNode->AddNode(trC2);
 	//cubeDeb = cube;
+
+	skybox = new CubemapNode("./skybox/top.jpg", "./skybox/left.jpg", "./skybox/right.jpg", "./skybox/bottom.jpg", "./skybox/front.jpg", "./skybox/back.jpg");
 }
 
 void Engine::Update()
@@ -175,6 +176,8 @@ void Engine::Update()
 				currentMouseX = e.motion.x;
 				currentMouseY = e.motion.y;
 				HandleMouseMotion(e.motion);
+				
+				SDL_WarpMouseInWindow(gWindow, 500, 500);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				HandleMouseClick(e.button);
@@ -205,8 +208,9 @@ void Engine::Render()
 	glm::mat4 proj = player->camera->GetProjectionMatrix();
 
 	ShaderLibrary::GetInstance()->SetPVGlobal(proj, view);
-	ShaderLibrary::GetInstance()->SetGlobalLight(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), player->camera->pos);
+	ShaderLibrary::GetInstance()->SetGlobalLight(glm::vec3(-100.0f, 100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), player->camera->pos);
 
+	skybox->Visualize();
 	SceneGraph->Visualize(glm::mat4(1.0f));
 }
 
@@ -246,7 +250,7 @@ void Engine::UpdateActions()
 
 void Engine::HandleMouseMotion(const SDL_MouseMotionEvent& motion)
 {
-	player->Look(glm::vec2(motion.x, motion.y));
+	player->Look(glm::vec2(motion.xrel, motion.yrel));
 }
 
 void Engine::HandleMouseClick(const SDL_MouseButtonEvent& button)
@@ -268,6 +272,7 @@ void Engine::Close()
 {
 	ShaderLibrary::GetInstance()->UnloadShaders();
 	// close program..
+	exit(0);
 }
 
 GLuint Engine::CreateCube(float width, GLuint& VBO)

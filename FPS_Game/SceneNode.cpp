@@ -137,6 +137,7 @@ void ModelNode::LoadModelFromFile(const std::string& path)
 
 void ModelNode::Visualize(const glm::mat4& transform)
 {
+	sdr->use();
 	sdr->setMat4("model", transform);
 	glm::mat3 normalMat = glm::transpose(glm::inverse(transform));
 	sdr->setMat3("normalMat", normalMat);

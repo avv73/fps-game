@@ -9,6 +9,7 @@
 #include "SceneNode.h"
 #include "Player.h"
 #include "Shader.h"
+#include "CubemapNode.h"
 
 class Engine
 {
@@ -25,6 +26,7 @@ private:
 	glm::vec3 actionVector = glm::vec3(0.0f);
 
 	Player* player;
+	CubemapNode* skybox;
 
 	float currentMouseX;
 	float currentMouseY;

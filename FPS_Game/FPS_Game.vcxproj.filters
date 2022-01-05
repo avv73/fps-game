@@ -15,10 +15,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shaders\cube_test.frag">
+    <None Include="shaders\grass.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shaders\cube_test.vert">
+    <None Include="shaders\grass.vert">
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\skybox.frag">

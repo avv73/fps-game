@@ -64,6 +64,9 @@ public:
 		unsigned int specularNr = 1;
 		unsigned int normalNr = 1;
 		unsigned int heightNr = 1;
+
+		bool specularSet = false;
+
 		for (unsigned int i = 0; i < textures.size(); i++)
 		{
 			glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
@@ -73,7 +76,10 @@ public:
 			if (name == "material.texture_diffuse")
 				number = std::to_string(diffuseNr++);
 			else if (name == "material.texture_specular")
+			{
 				number = std::to_string(specularNr++); // transfer unsigned int to stream
+				specularSet = true;
+			}
 			else if (name == "material.texture_normal")
 				number = std::to_string(normalNr++); // transfer unsigned int to stream
 			else if (name == "material.texture_height")
@@ -85,7 +91,9 @@ public:
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}
 
+		shader.use();
 		shader.setFloat("material.shininess", 64.0f);
+		shader.setBool("material.specularSet", specularSet);
 
 		// draw mesh
 		glBindVertexArray(VAO);

@@ -20,18 +20,7 @@ void Player::Move(glm::vec3 offset, float delta)
 
 void Player::Look(glm::vec2 motion)
 {
-	if (firstMouse)
-	{
-		lastX = motion.x;
-		lastY = motion.y;
-		firstMouse = false;
-	}
-	else
-	{
-		camera->ProcessMouseMovement(motion.x - lastX, lastY - motion.y, false);
-		lastX = motion.x;
-		lastY = motion.y;
-	}
+	camera->ProcessMouseMovement(motion.x, -motion.y, true);
 }
 
 void Player::Shoot()
