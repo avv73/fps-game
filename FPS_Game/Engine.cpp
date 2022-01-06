@@ -16,6 +16,8 @@
 #include "ShaderLibrary.h"
 #include "GLErrorLogger.h"
 
+#define FPS_COUNT
+
 Engine::Engine(Player* pl)
 	: player(pl)
 { }
@@ -136,19 +138,13 @@ void Engine::CreateScene()
 	//GLuint VBO;
 	//cube = CreateCube(1.0f, VBO);
 
+	floorRenderer = new FloorRenderer();
+
 	GroupNode* rootNode = new GroupNode("root");
-	TransformNode* trC = new TransformNode("grass_trans");
-
-	rootNode->AddNode(trC);
-
-	trC->Translate(glm::vec3(0.0f, -5.0f, 0.0f));
-	trC->Scale(glm::vec3(10.0f, 0.1f, 10.0f));
-
 	ModelNode* cube = new ModelNode("grass", "./models/cube/grass.obj");
 
-	trC->AddNode(cube);
+	floorRenderer->GenerateFloor(cube, 20, 20, glm::vec2(-20, -20));
 
-	rootNode->AddNode(trC);
 	//cubeDeb = cube;
 
 	skybox = new CubemapNode("./skybox/top.jpg", "./skybox/left.jpg", "./skybox/right.jpg", "./skybox/bottom.jpg", "./skybox/front.jpg", "./skybox/back.jpg");
@@ -158,13 +154,26 @@ void Engine::Update()
 {
 	SDL_Event e;
 
+	float startTime = SDL_GetTicks() / 1000.0f;
+	int frames = 0;
+
 	bool quit = false;
 	while (!quit)
 	{
 		float currentFrame = SDL_GetTicks() / 1000.0f;
+		frames++;
+
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+#ifdef FPS_COUNT
+		if (currentFrame - startTime >= 1.0)
+		{
+			printf("%f ms/frame\n", 1000.0f / float(frames));
+			frames = 0;
+			startTime += 1.0f;
+		}
+#endif
 		while (SDL_PollEvent(&e) != 0)
 		{
 			switch (e.type)
@@ -211,6 +220,7 @@ void Engine::Render()
 	ShaderLibrary::GetInstance()->SetGlobalLight(glm::vec3(-100.0f, 100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), player->camera->pos);
 
 	skybox->Visualize();
+	floorRenderer->Visualize();
 	SceneGraph->Visualize(glm::mat4(1.0f));
 }
 

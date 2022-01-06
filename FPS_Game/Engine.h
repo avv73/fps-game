@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Shader.h"
 #include "CubemapNode.h"
+#include "FloorRenderer.h"
 
 class Engine
 {
@@ -27,6 +28,7 @@ private:
 
 	Player* player;
 	CubemapNode* skybox;
+	FloorRenderer* floorRenderer;
 
 	float currentMouseX;
 	float currentMouseY;

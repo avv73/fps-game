@@ -154,6 +154,7 @@
     <ClInclude Include="CollisionSphere.h" />
     <ClInclude Include="CubemapNode.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="FloorRenderer.h" />
     <ClInclude Include="GLErrorLogger.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="Mesh.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="CollisionSphere.cpp" />
     <ClCompile Include="CubemapNode.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="FloorRenderer.cpp" />
     <ClCompile Include="GLErrorLogger.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
