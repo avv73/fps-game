@@ -15,16 +15,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shaders\grass.frag">
+    <None Include="shaders\terrain.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shaders\grass.vert">
+    <None Include="shaders\terrain.vert">
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\skybox.frag">
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\skybox.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\cube.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\cube.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
@@ -74,7 +80,7 @@
     <ClInclude Include="CubemapNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FloorRenderer.h">
+    <ClInclude Include="Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -115,7 +121,7 @@
     <ClCompile Include="CubemapNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FloorRenderer.cpp">
+    <ClCompile Include="Terrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

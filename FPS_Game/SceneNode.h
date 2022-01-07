@@ -66,11 +66,11 @@ public:
 	void Visualize(const glm::mat4& transform); // override
 	void Shoot(const glm::vec3& orig, const glm::vec3& dir); // override
 
-private:
+protected:
 	Model m;
 	Shader* sdr;
 	//BoundingSphere* sphere = NULL;
-
+private:
 	void LoadModelFromFile(const std::string& path);
 
 	void AutoLoadShader(const std::string& name);

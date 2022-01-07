@@ -15,6 +15,7 @@
 #include <iostream>
 #include "ShaderLibrary.h"
 #include "GLErrorLogger.h"
+#include "Terrain.h"
 
 #define FPS_COUNT
 
@@ -138,13 +139,20 @@ void Engine::CreateScene()
 	//GLuint VBO;
 	//cube = CreateCube(1.0f, VBO);
 
-	floorRenderer = new FloorRenderer();
-
 	GroupNode* rootNode = new GroupNode("root");
-	ModelNode* cube = new ModelNode("grass", "./models/cube/grass.obj");
+	ModelNode* cube = new ModelNode("cube", "./models/cube2/grass.obj");
 
-	floorRenderer->GenerateFloor(cube, 20, 20, glm::vec2(-20, -20));
+	TransformNode* tr = new TransformNode();
 
+	tr->Translate(glm::vec3(2.0f, 2.0f, 2.0f));
+
+	tr->AddNode(cube);
+
+	Terrain* terrain = new Terrain(glm::vec2(-10, -10), 10);
+	//Terrain* terrain = new Terrain(glm::vec2(0, 0), 2);
+
+	rootNode->AddNode(terrain);
+	rootNode->AddNode(tr);
 	//cubeDeb = cube;
 
 	skybox = new CubemapNode("./skybox/top.jpg", "./skybox/left.jpg", "./skybox/right.jpg", "./skybox/bottom.jpg", "./skybox/front.jpg", "./skybox/back.jpg");
@@ -220,7 +228,6 @@ void Engine::Render()
 	ShaderLibrary::GetInstance()->SetGlobalLight(glm::vec3(-100.0f, 100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), player->camera->pos);
 
 	skybox->Visualize();
-	floorRenderer->Visualize();
 	SceneGraph->Visualize(glm::mat4(1.0f));
 }
 

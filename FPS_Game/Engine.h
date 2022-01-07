@@ -28,7 +28,7 @@ private:
 
 	Player* player;
 	CubemapNode* skybox;
-	FloorRenderer* floorRenderer;
+	//FloorRenderer* floorRenderer;
 
 	float currentMouseX;
 	float currentMouseY;
