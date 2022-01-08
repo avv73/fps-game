@@ -73,6 +73,18 @@ Model Terrain::GenerateTerrain(glm::vec2 startPoint, int size)
 	}
 
 	// calculate normals??
+	for (int i = 0; i < indices.size(); i+=3)
+	{
+		glm::vec3 v0 = vertices[indices[i]].Position;
+		glm::vec3 v1 = vertices[indices[i + 1]].Position;
+		glm::vec3 v2 = vertices[indices[i + 2]].Position;
+		glm::vec3 u = v1 - v0;
+		glm::vec3 v = v2 - v0;
+		glm::vec3 n = glm::cross(u, v);
+		vertices[indices[i]].Normal = glm::normalize(n + vertices[indices[i]].Normal);
+		vertices[indices[i + 1]].Normal = glm::normalize(n + vertices[indices[i + 1]].Normal);
+		vertices[indices[i + 2]].Normal = glm::normalize(n + vertices[indices[i + 2]].Normal);
+	}
 
 	// load texture
 	Texture tex;

@@ -4,19 +4,17 @@ layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoords;
 
 out vec3 FragPos;
-//out vec3 Normal;
+out vec3 Normal;
 out vec2 TexCoords;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
-//uniform mat3 normalMat;
-
 void main()
 {
 	vec3 FragPos = vec3(model * vec4(aPos, 1.0));
-	//Normal = normalMat * aNormal;
+	Normal = aNormal;
 	TexCoords = aTexCoords;
 
 	gl_Position = proj * view * vec4(FragPos, 1.0);

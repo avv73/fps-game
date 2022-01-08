@@ -148,7 +148,7 @@ void Engine::CreateScene()
 
 	tr->AddNode(cube);
 
-	Terrain* terrain = new Terrain(glm::vec2(-10, -10), 10);
+	Terrain* terrain = new Terrain(glm::vec2(-20, -20), 40);
 	//Terrain* terrain = new Terrain(glm::vec2(0, 0), 2);
 
 	rootNode->AddNode(terrain);
@@ -156,6 +156,7 @@ void Engine::CreateScene()
 	//cubeDeb = cube;
 
 	skybox = new CubemapNode("./skybox/top.jpg", "./skybox/left.jpg", "./skybox/right.jpg", "./skybox/bottom.jpg", "./skybox/front.jpg", "./skybox/back.jpg");
+	hudRenderer = new HUDRenderer(player);
 }
 
 void Engine::Update()
@@ -229,6 +230,7 @@ void Engine::Render()
 
 	skybox->Visualize();
 	SceneGraph->Visualize(glm::mat4(1.0f));
+	hudRenderer->Visualize();
 }
 
 void Engine::HandleKeyDown(const Uint8* keystates)

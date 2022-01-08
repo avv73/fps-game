@@ -33,6 +33,12 @@
     <None Include="shaders\cube.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shaders\HUD.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\HUD.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionSphere.h">
@@ -83,6 +89,9 @@
     <ClInclude Include="Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HUDRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionSphere.cpp">
@@ -122,6 +131,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HUDRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

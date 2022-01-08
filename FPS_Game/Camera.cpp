@@ -26,6 +26,11 @@ glm::mat4 Camera::GetViewMatrix()
 	return glm::lookAt(pos, pos + front, up); //up
 }
 
+glm::mat4 Camera::GetOrthogonalMatrix()
+{
+	return glm::ortho(0.0f, (float)wSize, 0.0f, (float)hSize); // -1.0f, 1.0f
+}
+
 void Camera::ProcessKeyboard(CameraMovement direction, float delta, int quantor)
 {
 	float vel = delta * movementSpeed * quantor;
