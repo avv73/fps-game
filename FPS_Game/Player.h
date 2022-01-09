@@ -16,6 +16,10 @@ public:
 	void Look(glm::vec2 motion);
 	void Shoot();
 
+	int health;
+	const int health_max;
+	int ammo;
+
 private:
 };
 

@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 Player::Player(Camera* camera)
+	: health_max(5)
 {
 	this->camera = camera;
 }

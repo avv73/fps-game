@@ -9,6 +9,8 @@ int main(int argc, char* argv[])
 	Player* player = new Player(cam);
 	Engine* engine = new Engine(player);
 
+	player->health = 5;
+
 	engine->Start();
 
 	return 0;
