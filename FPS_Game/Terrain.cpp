@@ -8,9 +8,7 @@ Terrain::Terrain(glm::vec2 startPoint, int size)
 	sdr = ShaderLibrary::GetInstance()->GetShader("terrain");
 }
 
-void Terrain::Shoot(const glm::vec3& orig, const glm::vec3& dir)
-{
-}
+void Terrain::Shoot(const glm::vec3& orig, const glm::vec3& dir) { }
 
 void Terrain::Visualize(const glm::mat4& transform)
 {

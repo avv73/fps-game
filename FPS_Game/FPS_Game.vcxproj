@@ -152,6 +152,7 @@
     <None Include="shaders\skybox.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BulletEngine.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionPlane.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BulletEngine.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColisionPlane.cpp" />
     <ClCompile Include="Collision.cpp" />

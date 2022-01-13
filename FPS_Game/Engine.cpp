@@ -264,7 +264,12 @@ void Engine::HandleKeyDown(const Uint8* keystates)
 void Engine::UpdateActions()
 {
 	player->Move(actionVector, deltaTime);
+	if (actionVector.y == 1.0f)
+		player->Jump();
+
 	actionVector = glm::vec3(0.0f);
+
+	player->UpdateGravity(deltaTime);
 }
 
 void Engine::HandleMouseMotion(const SDL_MouseMotionEvent& motion)

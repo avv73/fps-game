@@ -19,7 +19,7 @@ public:
 	const std::string NodeName;
 };
 
-extern SceneNode* SceneGraph; // ?? first init in SceneNode.cpp ?
+extern SceneNode* SceneGraph;
 
 class GroupNode : public SceneNode
 {
