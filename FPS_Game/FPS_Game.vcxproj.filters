@@ -27,29 +27,26 @@
     <None Include="shaders\skybox.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shaders\cube.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\cube.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="shaders\HUD.vert">
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\HUD.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shaders\bullet.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\cube.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\cube.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\bullet.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollisionSphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionPlane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -95,17 +92,11 @@
     <ClInclude Include="BulletEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BoundingObjects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CollisionSphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ColisionPlane.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

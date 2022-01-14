@@ -3,6 +3,8 @@
 
 SceneNode* SceneGraph = NULL;
 
+std::vector<SceneNode*> SceneNode::intersectPath;
+
 // ===SceneNode===
 SceneNode::SceneNode() : NodeName("") 
 { 
@@ -53,12 +55,14 @@ void GroupNode::Visualize(const glm::mat4& transform) // override
 	}
 }
 
-void GroupNode::Shoot(const glm::vec3& orig, const glm::vec3& dir) // override
+void GroupNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits) // override
 {
+	intersectPath.push_back(this);
 	for (auto it = groups.begin(); it != groups.end(); ++it)
 	{
-		(*it)->Shoot(orig, dir);
+		(*it)->TraverseIntersection(orig, dir, hits);
 	}
+	intersectPath.pop_back();
 }
 
 // ===TransformNode===
@@ -103,9 +107,14 @@ void TransformNode::Visualize(const glm::mat4& transform) // override
 	}
 }
 
-void TransformNode::Shoot(const glm::vec3& orig, const glm::vec3& dir) // override
+void TransformNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits) // override
 {
-	GroupNode::Shoot(orig, dir);
+	intersectPath.push_back(this);
+	for (auto it = groups.begin(); it != groups.end(); ++it)
+	{
+		(*it)->TraverseIntersection(orig, dir, hits);
+	}
+	intersectPath.pop_back();
 }
 
 // ===ModelNode===
@@ -117,6 +126,12 @@ ModelNode::ModelNode(const std::string& name, const std::string& path) : SceneNo
 {
 	LoadModelFromFile(path);
 	AutoLoadShader(name);
+}
+
+ModelNode::~ModelNode()
+{
+	if (sphere != NULL)
+		delete sphere;
 }
 
 void ModelNode::SetShader(Shader* sd)
@@ -133,6 +148,7 @@ void ModelNode::LoadModelFromFile(const std::string& path)
 {
 	m.LoadModel(path);
 	// create sphere
+	sphere = new BoundingSphere(this, m);
 }
 
 void ModelNode::Visualize(const glm::mat4& transform)
@@ -141,12 +157,26 @@ void ModelNode::Visualize(const glm::mat4& transform)
 	sdr->setMat4("model", transform);
 	glm::mat3 normalMat = glm::transpose(glm::inverse(transform));
 	sdr->setMat3("normalMat", normalMat);
-	//boundingSphere->Transform ??
+	sphere->Transform(transform); // compromise, assume transform will not change when traversing for intersect since last visualize call
 	m.Draw(*sdr);
 }
 
-void ModelNode::Shoot(const glm::vec3& orig, const glm::vec3& dir)
+void ModelNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits)
 {
 	// traverse intersection...
+	Intersection* hit = new Intersection();
+	if (sphere->CollidesWithRay(orig, dir, *hit))
+	{
+		hit->intersectionPath = intersectPath;
+		hits.push_back(hit);
+	}
+	else
+		delete hit;
 }
+
+// TODO:
+// 1. Check Terrain class, should not create a boundingsphere since it is too big and will cause problems, also unneccesary.
+// 2. Check if ray will intersect the cube correctly => either
+//   2.1. raycast is incorrect, if ray doesn't intersect
+//   2.2. projectile visualization is incorrect
 

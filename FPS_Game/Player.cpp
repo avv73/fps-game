@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <stdio.h>
+#include <math.h>
 
 Player::Player(Camera* camera)
 	: health_max(5)
@@ -43,7 +44,17 @@ void Player::UpdateGravity(float delta)
 	}
 }
 
-void Player::Shoot()
+void Player::Shoot(BulletEngine* bEngine)
 {
-	//SceneGraph->Shoot(...)
+	int centerH = ceil(camera->hSize / 2.0f);
+	int centerW = ceil(camera->wSize / 2.0f);
+
+	glm::vec3 direction;
+	glm::vec3 orig = camera->pos;
+
+	BulletEngine::ScreenPosToWorldRay(centerH, centerW, camera->wSize, camera->hSize, camera->GetViewMatrix(), camera->GetProjectionMatrix(), direction);
+
+	printf("Direction: %f %f %f\n", direction.x, direction.y, direction.z);
+
+	bEngine->Shoot(direction, orig);
 }

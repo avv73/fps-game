@@ -142,6 +142,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="shaders\bullet.frag" />
+    <None Include="shaders\bullet.vert" />
     <None Include="shaders\cube.frag" />
     <None Include="shaders\cube.vert" />
     <None Include="shaders\HUD.frag" />
@@ -152,11 +154,9 @@
     <None Include="shaders\skybox.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoundingObjects.h" />
     <ClInclude Include="BulletEngine.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Collision.h" />
-    <ClInclude Include="CollisionPlane.h" />
-    <ClInclude Include="CollisionSphere.h" />
     <ClInclude Include="CubemapNode.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GLErrorLogger.h" />
@@ -174,9 +174,6 @@
   <ItemGroup>
     <ClCompile Include="BulletEngine.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ColisionPlane.cpp" />
-    <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="CollisionSphere.cpp" />
     <ClCompile Include="CubemapNode.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GLErrorLogger.cpp" />

@@ -1,10 +1,11 @@
 #pragma once
-#include "SceneNode.h"
-#include <glm/glm.hpp>
-#include "Camera.h"
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "SceneNode.h"
+#include <glm/glm.hpp>
+#include "Camera.h"
+#include "BulletEngine.h"
 class Player
 {
 public:
@@ -16,7 +17,7 @@ public:
 	void Move(glm::vec3 offset, float delta);
 	void Jump();
 	void Look(glm::vec2 motion);
-	void Shoot();
+	void Shoot(BulletEngine* bEngine);
 
 	void UpdateGravity(float delta);
 

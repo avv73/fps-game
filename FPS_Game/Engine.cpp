@@ -101,6 +101,7 @@ bool Engine::Init()
 			success = false;
 		}
 
+		bulletEngine = new BulletEngine(100, 100);
 	}
 
 	return success;
@@ -230,6 +231,7 @@ void Engine::Render()
 
 	skybox->Visualize();
 	SceneGraph->Visualize(glm::mat4(1.0f));
+	bulletEngine->Visualize();
 	hudRenderer->Visualize();
 }
 
@@ -270,6 +272,7 @@ void Engine::UpdateActions()
 	actionVector = glm::vec3(0.0f);
 
 	player->UpdateGravity(deltaTime);
+	bulletEngine->Update(deltaTime);
 }
 
 void Engine::HandleMouseMotion(const SDL_MouseMotionEvent& motion)
@@ -285,7 +288,7 @@ void Engine::HandleMouseClick(const SDL_MouseButtonEvent& button)
 	switch (button.button)
 	{
 	case SDL_BUTTON_LEFT:
-		player->Shoot();
+		player->Shoot(bulletEngine);
 		break;
 	case SDL_BUTTON_RIGHT:
 		break;

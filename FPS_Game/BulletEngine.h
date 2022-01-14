@@ -3,13 +3,13 @@
 #define BULLETENGINE_H
 
 #include <glm/glm.hpp>
-#include "Player.h"
+#include <vector>
+#include "Model.h"
+#include "Shader.h"
 
 class Bullet
 {
 public:
-	Bullet(glm::vec3 pos, glm::vec3 dir);
-
 	glm::vec3 position;
 	glm::vec3 direction;
 	bool clipped;
@@ -29,7 +29,7 @@ public:
 	void Shoot(glm::vec3 worldDirection, glm::vec3 origin);
 
 private:
-	vector<Bullet> shotBullets;
+	std::vector<Bullet> shotBullets;
 
 	const float ClipX;
 	const float ClipZ;
@@ -37,7 +37,7 @@ private:
 	Model bulletModel;
 	Shader* bulletShdr;
 
-	const float BulletVelocity = 3.0f;
+	const float BulletVelocity = 30.0f;
 	const int ClipThreshold = 100000000;
 	
 	int clipCounter = 0;

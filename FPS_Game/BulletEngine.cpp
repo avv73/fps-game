@@ -2,17 +2,11 @@
 #include "ShaderLibrary.h"
 #include <math.h>
 
-Bullet::Bullet(glm::vec3 pos, glm::vec3 dir)
-{
-	position = pos;
-	direction = dir;
-}
-
 BulletEngine::BulletEngine(float clipX, float clipZ)
 	: ClipX(clipX), ClipZ(clipZ)
 {
 	bulletShdr = ShaderLibrary::GetInstance()->GetShader("bullet");
-	bulletModel.LoadModel("./models/bullet/bullet.obj");
+	bulletModel.LoadModel("./models/bullet/bulletNewObj.obj");
 	shotBullets.reserve(100);
 }
 
@@ -74,6 +68,8 @@ void BulletEngine::FreeClippedBullets()
 {
 	for (auto it = shotBullets.begin(); it != shotBullets.end(); ++it)
 	{
+		if (!(*it).clipped)
+			continue;
 		shotBullets.erase(it);
 	}
 }
@@ -81,4 +77,11 @@ void BulletEngine::FreeClippedBullets()
 void BulletEngine::Visualize()
 {
 	// TODO: Visualize all bullets in the vector, translate?
+	for (auto it = shotBullets.begin(); it != shotBullets.end(); ++it)
+	{
+		bulletShdr->use();
+		glm::mat4 translateM = glm::translate(glm::mat4(1.0f), (*it).position);
+		bulletShdr->setMat4("model", translateM);
+		bulletModel.Draw(*bulletShdr);
+	}
 }
