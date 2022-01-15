@@ -1,12 +1,13 @@
 #pragma once
+
+#ifndef SCENENODE_H
+#define SCENENODE_H
+
 #include <glm/glm.hpp>
 #include <vector>
 #include "Model.h"
 #include "Shader.h"
 #include "BoundingObjects.h"
-
-#ifndef SCENENODE_H
-#define SCENENODE_H
 
 class SceneNode
 {

@@ -164,10 +164,15 @@ void ModelNode::Visualize(const glm::mat4& transform)
 void ModelNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits)
 {
 	// traverse intersection...
+	if (sphere == NULL)
+		return;
+
 	Intersection* hit = new Intersection();
 	if (sphere->CollidesWithRay(orig, dir, *hit))
 	{
 		hit->intersectionPath = intersectPath;
+		hit->intersectionPath.push_back(this);
+		hit->intersectedNode = this;
 		hits.push_back(hit);
 	}
 	else
@@ -175,7 +180,7 @@ void ModelNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir
 }
 
 // TODO:
-// 1. Check Terrain class, should not create a boundingsphere since it is too big and will cause problems, also unneccesary.
+//+ 1. Check Terrain class, should not create a boundingsphere since it is too big and will cause problems, also unneccesary.
 // 2. Check if ray will intersect the cube correctly => either
 //   2.1. raycast is incorrect, if ray doesn't intersect
 //   2.2. projectile visualization is incorrect

@@ -24,13 +24,20 @@ public:
 	int health;
 	const int health_max;
 	int ammo;
+	const int ammo_max;
 
 private:
 	float yVelocity;
 	
 	const float Gravity = 5.0f;
 
+	int reloadTicks = 0;
+
+	const int reloadMaxTicks = 1000;
+
 	bool isInAir;
+
+	void ReloadTick();
 };
 
 

@@ -3,7 +3,7 @@
 #include <math.h>
 
 Player::Player(Camera* camera)
-	: health_max(5)
+	: health_max(5), ammo_max(5)
 {
 	this->camera = camera;
 	this->yVelocity = yVelocity;
@@ -42,19 +42,54 @@ void Player::UpdateGravity(float delta)
 		yVelocity = 0.0f;
 		isInAir = false;
 	}
+
+	ReloadTick();
+}
+
+void Player::ReloadTick()
+{
+	if (ammo == 0)
+	{
+		reloadTicks++;
+	}
+
+	if (reloadTicks == reloadMaxTicks)
+	{
+		reloadTicks = 0;
+		ammo = ammo_max;
+	}
 }
 
 void Player::Shoot(BulletEngine* bEngine)
 {
-	int centerH = ceil(camera->hSize / 2.0f);
-	int centerW = ceil(camera->wSize / 2.0f);
+	if (ammo == 0)
+	{
+		// wait for reload
+		return;
+	}
 
 	glm::vec3 direction;
 	glm::vec3 orig = camera->pos;
 
-	BulletEngine::ScreenPosToWorldRay(centerH, centerW, camera->wSize, camera->hSize, camera->GetViewMatrix(), camera->GetProjectionMatrix(), direction);
+	BulletEngine::ScreenCenterToWorldRay(camera->GetViewMatrix(), camera->GetProjectionMatrix(), direction);
 
 	printf("Direction: %f %f %f\n", direction.x, direction.y, direction.z);
 
-	bEngine->Shoot(direction, orig);
+	bEngine->Shoot(direction, orig, camera->yaw - YAW, camera->pitch); // lazy
+
+	std::vector<Intersection*> inters;
+	SceneGraph->TraverseIntersection(orig, direction, inters);
+
+	if (inters.size() > 0)
+	{
+		printf("===Intersected!\n");
+		std::vector<SceneNode*> path = inters[0]->intersectionPath;
+		for (auto it = path.begin(); it != path.end(); ++it)
+		{
+			printf("->%s", (*it)->NodeName.c_str());
+		}
+		printf("\n");
+	}
+
+	ammo--;
 }

@@ -12,6 +12,8 @@ class Bullet
 public:
 	glm::vec3 position;
 	glm::vec3 direction;
+	float yaw;
+	float pitch;
 	bool clipped;
 };
 
@@ -24,9 +26,9 @@ public:
 
 	void Visualize();
 
-	static void ScreenPosToWorldRay(int mouseX, int mouseY, int viewportWidth, int viewportHeight, glm::mat4 viewMatrix, glm::mat4 projMatrix, glm::vec3& outDir);
+	static void ScreenCenterToWorldRay(glm::mat4 viewMatrix, glm::mat4 projMatrix, glm::vec3& outDir);
 	
-	void Shoot(glm::vec3 worldDirection, glm::vec3 origin);
+	void Shoot(glm::vec3 worldDirection, glm::vec3 origin, float yaw, float pitch);
 
 private:
 	std::vector<Bullet> shotBullets;
@@ -37,7 +39,7 @@ private:
 	Model bulletModel;
 	Shader* bulletShdr;
 
-	const float BulletVelocity = 30.0f;
+	const float BulletVelocity = 100.0f; //30 dbg
 	const int ClipThreshold = 100000000;
 	
 	int clipCounter = 0;

@@ -144,6 +144,8 @@
     <None Include="packages.config" />
     <None Include="shaders\bullet.frag" />
     <None Include="shaders\bullet.vert" />
+    <None Include="shaders\crate.frag" />
+    <None Include="shaders\crate.vert" />
     <None Include="shaders\cube.frag" />
     <None Include="shaders\cube.vert" />
     <None Include="shaders\HUD.frag" />
@@ -152,6 +154,8 @@
     <None Include="shaders\terrain.vert" />
     <None Include="shaders\skybox.frag" />
     <None Include="shaders\skybox.vert" />
+    <None Include="shaders\zombie.frag" />
+    <None Include="shaders\zombie.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoundingObjects.h" />
@@ -172,6 +176,7 @@
     <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BoundingObjects.cpp" />
     <ClCompile Include="BulletEngine.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CubemapNode.cpp" />

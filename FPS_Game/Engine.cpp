@@ -52,16 +52,27 @@ bool Engine::Init()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
-		SDL_DisplayMode dMode;
+		//SDL_SetHintWithPriority(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "1", SDL_HINT_OVERRIDE);
+
+		/*SDL_DisplayMode dMode;
 		SDL_GetCurrentDisplayMode(0, &dMode);
+		printf("%d x %d\n", dMode.w, dMode.h);*/
 
-		gWindow = SDL_CreateWindow("FPS Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, dMode.w, dMode.h,
-			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED);
+		gWindow = SDL_CreateWindow("FPS Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0,
+			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED ); // SDL_WINDOW_MAXIMIZED
 
-		player->camera->SetProjectionMatrix(glm::radians(45.0f), dMode.w, dMode.h, 0.1f, 100.0f);
+		/*int w, h;
+
+		SDL_GetWindowSize(gWindow, &w, &h);
+		printf("%d x %d\n", w, h);*/
+
+		int w, h;
+		SDL_GL_GetDrawableSize(gWindow, &w, &h);
+
+		player->camera->SetProjectionMatrix(glm::radians(45.0f), w, h, 0.1f, 100.0f);
 		
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		SDL_WarpMouseInWindow(gWindow, dMode.w / 2, dMode.h / 2);
+		SDL_WarpMouseInWindow(gWindow, w / 2, h / 2);
 
 		if (gWindow == NULL)
 		{
@@ -101,7 +112,7 @@ bool Engine::Init()
 			success = false;
 		}
 
-		bulletEngine = new BulletEngine(100, 100);
+		bulletEngine = new BulletEngine(250, 250);
 	}
 
 	return success;
@@ -141,19 +152,38 @@ void Engine::CreateScene()
 	//cube = CreateCube(1.0f, VBO);
 
 	GroupNode* rootNode = new GroupNode("root");
-	ModelNode* cube = new ModelNode("cube", "./models/cube2/grass.obj");
 
-	TransformNode* tr = new TransformNode();
+	ModelNode* cube = new ModelNode("cube", "./models/cube2/grass.obj");
+	TransformNode* tr = new TransformNode("transform_cube");
+
+	ModelNode* zombie = new ModelNode("zombie", "./models/zombie/zombie.obj");
+	TransformNode* trZombie = new TransformNode("zombie_transf");
+
+	ModelNode* crate = new ModelNode("crate", "./models/crate/Wooden Crate.obj");
+	TransformNode* trCrate = new TransformNode("crate_transf");
+
+	GroupNode* crates = new GroupNode("crates");
 
 	tr->Translate(glm::vec3(2.0f, 2.0f, 2.0f));
-
 	tr->AddNode(cube);
+
+	trZombie->Translate(glm::vec3(1.0f, -1.0f, 3.0f));
+	trZombie->AddNode(zombie);
+
+	trCrate->Translate(glm::vec3(3.0f, -1.0f, 10.0f));
+	trCrate->Scale(glm::vec3(0.3f, 0.3f, 0.3f));
+	trCrate->AddNode(crate);
+
+	crates->AddNode(trCrate);
 
 	Terrain* terrain = new Terrain(glm::vec2(-20, -20), 40);
 	//Terrain* terrain = new Terrain(glm::vec2(0, 0), 2);
 
 	rootNode->AddNode(terrain);
 	rootNode->AddNode(tr);
+	rootNode->AddNode(trZombie);
+	rootNode->AddNode(crates);
+
 	//cubeDeb = cube;
 
 	skybox = new CubemapNode("./skybox/top.jpg", "./skybox/left.jpg", "./skybox/right.jpg", "./skybox/bottom.jpg", "./skybox/front.jpg", "./skybox/back.jpg");

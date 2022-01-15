@@ -87,7 +87,7 @@ Model Terrain::GenerateTerrain(glm::vec2 startPoint, int size)
 	// load texture
 	Texture tex;
 	GLuint texid;
-	if (Model::LoadTexture("./models/terrain_tex.jpg", texid))
+	if (Model::LoadTexture("./models/terrain_tex.jpeg", texid))
 	{
 		tex.id = texid;
 		tex.type = "material.texture_diffuse";

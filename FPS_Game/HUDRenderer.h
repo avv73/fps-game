@@ -23,12 +23,22 @@ private:
 	GLuint texID_heart_f;
 	GLuint texID_heart_e;
 
+	GLuint VAO_ammo;
+	GLuint VBO_ammo;
+	GLuint texID_ammo_f;
+	GLuint texID_ammo_e;
+
 	Shader* shd;
 
 	void CreateHUD();
 
+	void CreateHeart();
+	void CreateCrosshair();
+	void CreateAmmo();
+
 	void VisualizeCrosshair();
 	void VisualizeHealth(bool isFilled, float offset);
+	void VisualizeAmmo(bool isFilled, float offset);
 };
 
 
