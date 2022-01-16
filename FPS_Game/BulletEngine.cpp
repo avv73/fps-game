@@ -1,6 +1,7 @@
 #include "BulletEngine.h"
 #include "ShaderLibrary.h"
 #include <math.h>
+#include "BoundingObjects.h"
 
 BulletEngine::BulletEngine(float clipX, float clipZ)
 	: ClipX(clipX), ClipZ(clipZ)
@@ -34,6 +35,38 @@ void BulletEngine::Shoot(glm::vec3 worldDirection, glm::vec3 origin, float yaw, 
 	blt.yaw = yaw;
 	blt.pitch = pitch;
 
+	std::vector<Intersection*> inters;
+	SceneGraph->TraverseIntersection(origin, worldDirection, inters, true);
+
+	if (inters.size() > 0)
+	{
+		printf("===Intersected!\n");
+
+		// find minimum intersect
+		Intersection* minIntersect = inters[0];
+
+		for (auto i = inters.begin(); i != inters.end(); ++i)
+		{
+			if ((*i)->distance < minIntersect->distance)
+			{
+				minIntersect = *i;
+			}
+		}
+
+		std::vector<SceneNode*> path = minIntersect->intersectionPath;
+		for (auto it = path.begin(); it != path.end(); ++it)
+		{
+			printf("->%s", (*it)->NodeName.c_str());
+		}
+		printf("\n");
+
+		blt.intersectedNode = minIntersect->intersectedNode;
+	}
+	else
+	{
+		blt.intersectedNode = NULL;
+	}
+
 	shotBullets.push_back(blt);
 }
 
@@ -48,10 +81,37 @@ void BulletEngine::Update(float delta)
 		if (fabs((*it).position.x) > ClipX || fabs((*it).position.z) > ClipZ)
 		{
 			(*it).clipped = true;
+			continue;
+		}
+
+		// on each 20 frame, perform raycast from current bullet position
+		// if struck object doesn't match, clip bullet
+		if (clipCounter % 20 == 0 && (*it).intersectedNode != NULL)
+		{
+			std::vector<Intersection*> inters;
+			SceneGraph->TraverseIntersection((*it).position, (*it).direction, inters, false);
+
+			if (inters.size() > 0)
+			{
+				Intersection* minIntersect = inters[0];
+
+				for (auto i = inters.begin(); i != inters.end(); ++i)
+				{
+					if ((*i)->distance < minIntersect->distance)
+					{
+						minIntersect = *i;
+					}
+				}
+
+				if ((*it).intersectedNode != minIntersect->intersectedNode)
+					(*it).clipped = true;
+			}
+			else if ((*it).intersectedNode != NULL)
+			{ 
+				(*it).clipped = true;
+			}
 		}
 	}
-
-	// TODO: perform collision detection?
 
 	clipCounter++;
 	if (clipCounter >= ClipThreshold)
@@ -59,6 +119,8 @@ void BulletEngine::Update(float delta)
 		FreeClippedBullets();
 		clipCounter = 0;
 	}
+
+	
 }
 
 void BulletEngine::FreeClippedBullets()
@@ -73,9 +135,11 @@ void BulletEngine::FreeClippedBullets()
 
 void BulletEngine::Visualize()
 {
-	// TODO: Visualize all bullets in the vector, translate?
 	for (auto it = shotBullets.begin(); it != shotBullets.end(); ++it)
 	{
+		if ((*it).clipped)
+			continue;
+
 		bulletShdr->use();
 		glm::mat4 transformM = glm::translate(glm::mat4(1.0f), (*it).position);
 		transformM = glm::rotate(transformM, glm::radians(-(*it).yaw), glm::vec3(0.0f, 1.0f, 0.0f)); 

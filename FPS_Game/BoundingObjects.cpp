@@ -43,6 +43,15 @@ BoundingSphere::BoundingSphere(ModelNode* gn, const Model& model)
 	}
 }
 
+BoundingSphere::BoundingSphere(ModelNode* gn, const glm::vec3& pos, const float radius)
+{
+	worldCenter.x = pos.x;
+	worldCenter.y = pos.y;
+	worldCenter.z = pos.z;
+	this->radius = radius;
+	node = gn;
+}
+
 const glm::vec3& BoundingSphere::GetCenter() const
 {
 	return center;
@@ -56,6 +65,11 @@ const glm::vec3 BoundingSphere::GetWorldCenter() const
 const float BoundingSphere::GetRadius() const
 {
 	return radius;
+}
+
+void BoundingSphere::SetWorldCenter(const glm::vec3& center)
+{
+	worldCenter = center;
 }
 
 void BoundingSphere::Transform(const glm::mat4& model)

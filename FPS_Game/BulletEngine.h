@@ -6,6 +6,7 @@
 #include <vector>
 #include "Model.h"
 #include "Shader.h"
+#include "SceneNode.h"
 
 class Bullet
 {
@@ -14,7 +15,9 @@ public:
 	glm::vec3 direction;
 	float yaw;
 	float pitch;
+
 	bool clipped;
+	SceneNode* intersectedNode;
 };
 
 class BulletEngine
@@ -42,7 +45,7 @@ private:
 	const float BulletVelocity = 100.0f; //30 dbg
 	const int ClipThreshold = 100000000;
 	
-	int clipCounter = 0;
+	int clipCounter = 1;
 
 	void FreeClippedBullets();
 };

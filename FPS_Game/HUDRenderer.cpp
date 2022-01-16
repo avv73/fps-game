@@ -132,13 +132,13 @@ void HUDRenderer::Visualize()
 
 	int h_offset = 0;
 
-	for (int i = 0; i < pl->health; i++)
+	for (int i = 0; i < pl->GetHealth(); i++)
 	{
 		VisualizeHealth(true, h_offset * 30.0f);
 		h_offset++;
 	}
 
-	for (int i = pl->health_max - pl->health; i > 0; i--)
+	for (int i = pl->health_max - pl->GetHealth(); i > 0; i--)
 	{
 		VisualizeHealth(false, h_offset * 30.0f);
 		h_offset++;
@@ -146,13 +146,13 @@ void HUDRenderer::Visualize()
 
 	h_offset = 0;
 
-	for (int i = 0; i < pl->ammo; i++)
+	for (int i = 0; i < pl->GetAmmo(); i++)
 	{
 		VisualizeAmmo(true, h_offset * 30.0f);
 		h_offset++;
 	}
 
-	for (int i = pl->ammo_max - pl->ammo; i > 0; i--)
+	for (int i = pl->ammo_max - pl->GetAmmo(); i > 0; i--)
 	{
 		VisualizeAmmo(false, h_offset * 30.0f);
 		h_offset++;

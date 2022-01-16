@@ -5,12 +5,12 @@
 
 int main(int argc, char* argv[])
 {
+	// TODO:
+	// Make zombie also shoot player.
+
 	Camera* cam = new Camera();
 	Player* player = new Player(cam);
 	Engine* engine = new Engine(player);
-
-	player->health = 5;
-	player->ammo = 5;
 
 	engine->Start();
 

@@ -169,11 +169,14 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerNode.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLibrary.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="Zombie.h" />
+    <ClInclude Include="ZombieNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoundingObjects.cpp" />
@@ -186,9 +189,12 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerNode.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="ShaderLibrary.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="Zombie.cpp" />
+    <ClCompile Include="ZombieNode.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -45,6 +45,8 @@ protected:
 public:
 	BoundingSphere(ModelNode* gn, const Model& model);
 
+	BoundingSphere(ModelNode* gn, const glm::vec3& pos, const float radius);
+
 	const glm::vec3& GetCenter() const;
 
 	const glm::vec3 GetWorldCenter() const;
@@ -52,6 +54,8 @@ public:
 	const float GetRadius() const;
 
 	void Transform(const glm::mat4& model);
+
+	void SetWorldCenter(const glm::vec3& center);
 
 	bool CollidesWithRay(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, Intersection& hit);
 };

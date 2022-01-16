@@ -55,12 +55,12 @@ void GroupNode::Visualize(const glm::mat4& transform) // override
 	}
 }
 
-void GroupNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits) // override
+void GroupNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot) // override
 {
 	intersectPath.push_back(this);
 	for (auto it = groups.begin(); it != groups.end(); ++it)
 	{
-		(*it)->TraverseIntersection(orig, dir, hits);
+		(*it)->TraverseIntersection(orig, dir, hits, isShot);
 	}
 	intersectPath.pop_back();
 }
@@ -68,38 +68,58 @@ void GroupNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir
 // ===TransformNode===
 TransformNode::TransformNode()
 {
-	transform = glm::mat4(1.0f);
+	//transform = glm::mat4(1.0f); 
+	rotateVector = glm::vec3(0.0f);
+	scaleVector = glm::vec3(1.0f);
+	translateVector = glm::vec3(0.0f);
+	rotateAngleRad = 0.0f;
 }
 
 TransformNode::TransformNode(const std::string& tr) : GroupNode(tr)
 {
-	transform = glm::mat4(1.0f);
+	//transform = glm::mat4(1.0f);
+	rotateVector = glm::vec3(0.0f);
+	scaleVector = glm::vec3(1.0f);
+	translateVector = glm::vec3(0.0f);
+	rotateAngleRad = 0.0f;
 }
 
-void TransformNode::Rotate(glm::vec3 rtV, float angle)
-{
-	transform = glm::rotate(transform, glm::radians(angle), rtV);
-}
+//void TransformNode::Rotate(glm::vec3 rtV, float angle)
+//{
+//	transform = glm::rotate(transform, glm::radians(angle), rtV);
+//}
+//
+//void TransformNode::Scale(glm::vec3 scV)
+//{
+//	transform = glm::scale(transform, scV);
+//}
+//
+//void TransformNode::Translate(glm::vec3 trV)
+//{
+//	transform = glm::translate(transform, trV);
+//}
 
-void TransformNode::Scale(glm::vec3 scV)
-{
-	transform = glm::scale(transform, scV);
-}
-
-void TransformNode::Translate(glm::vec3 trV)
-{
-	transform = glm::translate(transform, trV);
-}
-
-void TransformNode::SetTransform(glm::mat4 tr)
-{
-	transform = tr;
-}
+//void TransformNode::SetTransform(glm::mat4 tr)
+//{
+//	transform = tr;
+//}
+//
+//glm::mat4 TransformNode::GetTransform()
+//{
+//	return transform;
+//}
 
 void TransformNode::Visualize(const glm::mat4& transform) // override
 {
 	// stack matrices
-	glm::mat4 stackedTr = this->transform * transform;
+	glm::mat4 localTransform = glm::mat4(1.0f);
+
+	localTransform = glm::translate(localTransform, translateVector);
+	if (rotateAngleRad != 0.0f)
+		localTransform = glm::rotate(localTransform, rotateAngleRad, rotateVector);
+	localTransform = glm::scale(localTransform, scaleVector);
+
+	glm::mat4 stackedTr = localTransform * transform;
 
 	for (auto it = groups.begin(); it != groups.end(); ++it)
 	{
@@ -107,12 +127,12 @@ void TransformNode::Visualize(const glm::mat4& transform) // override
 	}
 }
 
-void TransformNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits) // override
+void TransformNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot) // override
 {
 	intersectPath.push_back(this);
 	for (auto it = groups.begin(); it != groups.end(); ++it)
 	{
-		(*it)->TraverseIntersection(orig, dir, hits);
+		(*it)->TraverseIntersection(orig, dir, hits, isShot);
 	}
 	intersectPath.pop_back();
 }
@@ -161,7 +181,7 @@ void ModelNode::Visualize(const glm::mat4& transform)
 	m.Draw(*sdr);
 }
 
-void ModelNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits)
+void ModelNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot)
 {
 	// traverse intersection...
 	if (sphere == NULL)
@@ -178,10 +198,3 @@ void ModelNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir
 	else
 		delete hit;
 }
-
-// TODO:
-//+ 1. Check Terrain class, should not create a boundingsphere since it is too big and will cause problems, also unneccesary.
-// 2. Check if ray will intersect the cube correctly => either
-//   2.1. raycast is incorrect, if ray doesn't intersect
-//   2.2. projectile visualization is incorrect
-

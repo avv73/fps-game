@@ -6,6 +6,8 @@
 #include <glm/glm.hpp>
 #include "Camera.h"
 #include "BulletEngine.h"
+#include "PlayerNode.h"
+
 class Player
 {
 public:
@@ -13,6 +15,7 @@ public:
 
 	Player(Camera* camera);
 
+	void SetPlayerNode(PlayerNode* plNode);
 
 	void Move(glm::vec3 offset, float delta);
 	void Jump();
@@ -21,23 +24,30 @@ public:
 
 	void UpdateGravity(float delta);
 
-	int health;
-	const int health_max;
-	int ammo;
-	const int ammo_max;
+	int GetHealth();
+	int GetAmmo();
 
+	void DecreaseHealth();
+
+	const int ammo_max;
+	const int health_max;
 private:
 	float yVelocity;
+
+	PlayerNode* plNode;
 	
 	const float Gravity = 5.0f;
 
-	int reloadTicks = 0;
+	float reloadTicks = 0;
 
-	const int reloadMaxTicks = 1000;
+	const int reloadMaxTicks = 5;
 
 	bool isInAir;
 
-	void ReloadTick();
+	void ReloadTick(float delta);
+
+	int health;
+	int ammo;
 };
 
 

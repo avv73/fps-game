@@ -5,6 +5,7 @@
 #include <GL\glew.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
+#include <vector>
 
 #include "SceneNode.h"
 #include "Player.h"
@@ -12,6 +13,7 @@
 #include "CubemapNode.h"
 #include "HUDRenderer.h"
 #include "BulletEngine.h"
+#include "Zombie.h"
 
 class Engine
 {
@@ -28,6 +30,7 @@ private:
 	glm::vec3 actionVector = glm::vec3(0.0f);
 
 	Player* player;
+	std::vector<Zombie*> zombies;
 	CubemapNode* skybox;
 	HUDRenderer* hudRenderer;
 	BulletEngine* bulletEngine;

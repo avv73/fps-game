@@ -16,6 +16,7 @@
 #include "ShaderLibrary.h"
 #include "GLErrorLogger.h"
 #include "Terrain.h"
+#include "ZombieNode.h"
 
 #define FPS_COUNT
 
@@ -153,25 +154,38 @@ void Engine::CreateScene()
 
 	GroupNode* rootNode = new GroupNode("root");
 
+	// add player node
+	PlayerNode* pl = new PlayerNode(player);
+	player->SetPlayerNode(pl);
+
+	rootNode->AddNode(pl);
+
 	ModelNode* cube = new ModelNode("cube", "./models/cube2/grass.obj");
 	TransformNode* tr = new TransformNode("transform_cube");
 
-	ModelNode* zombie = new ModelNode("zombie", "./models/zombie/zombie.obj");
+	//ModelNode* zombie = new ModelNode("zombie", "./models/zombie/zombie.obj");
 	TransformNode* trZombie = new TransformNode("zombie_transf");
+	trZombie->translateVector = glm::vec3(1.0f, -1.0f, 3.0f);
+	trZombie->rotateVector = glm::vec3(0.0f, 1.0f, 0.0f);
+	trZombie->rotateAngleRad = glm::radians(-170.0f);
+
+	Zombie* zombie = new Zombie(trZombie, player);
+	ZombieNode* zombieNode = new ZombieNode(zombie);
+
+	zombie->SetSceneNode(zombieNode);
 
 	ModelNode* crate = new ModelNode("crate", "./models/crate/Wooden Crate.obj");
 	TransformNode* trCrate = new TransformNode("crate_transf");
 
 	GroupNode* crates = new GroupNode("crates");
 
-	tr->Translate(glm::vec3(2.0f, 2.0f, 2.0f));
+	tr->translateVector = glm::vec3(2.0f, 2.0f, 2.0f);
 	tr->AddNode(cube);
 
-	trZombie->Translate(glm::vec3(1.0f, -1.0f, 3.0f));
-	trZombie->AddNode(zombie);
+	trZombie->AddNode(zombieNode);
 
-	trCrate->Translate(glm::vec3(3.0f, -1.0f, 10.0f));
-	trCrate->Scale(glm::vec3(0.3f, 0.3f, 0.3f));
+	trCrate->translateVector = glm::vec3(3.0f, -1.0f, 10.0f);
+	trCrate->scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
 	trCrate->AddNode(crate);
 
 	crates->AddNode(trCrate);
@@ -188,6 +202,8 @@ void Engine::CreateScene()
 
 	skybox = new CubemapNode("./skybox/top.jpg", "./skybox/left.jpg", "./skybox/right.jpg", "./skybox/bottom.jpg", "./skybox/front.jpg", "./skybox/back.jpg");
 	hudRenderer = new HUDRenderer(player);
+
+	zombies.push_back(zombie);
 }
 
 void Engine::Update()
@@ -303,6 +319,11 @@ void Engine::UpdateActions()
 
 	player->UpdateGravity(deltaTime);
 	bulletEngine->Update(deltaTime);
+
+	for (auto it = zombies.begin(); it != zombies.end(); ++it)
+	{
+		(*it)->Update(deltaTime);
+	}
 }
 
 void Engine::HandleMouseMotion(const SDL_MouseMotionEvent& motion)
