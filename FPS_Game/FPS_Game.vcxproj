@@ -165,6 +165,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GLErrorLogger.h" />
     <ClInclude Include="HUDRenderer.h" />
+    <ClInclude Include="IDamageable.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />

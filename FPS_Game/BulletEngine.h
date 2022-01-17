@@ -42,10 +42,11 @@ private:
 	Model bulletModel;
 	Shader* bulletShdr;
 
-	const float BulletVelocity = 100.0f; //30 dbg
-	const int ClipThreshold = 100000000;
-	
-	int clipCounter = 1;
+	const float BulletVelocity = 5.0f; //30 dbg 100 real
+	const int ClipThreshold = 15.0f;
+	const float BulletRaycastThreshold = 1.0f;
+
+	float deltaClip = 0.0f;
 
 	void FreeClippedBullets();
 };

@@ -16,7 +16,7 @@ public:
 	SceneNode(const std::string& name);
 
 	virtual void Visualize(const glm::mat4& transform) = 0;
-	virtual void TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot) = 0;
+	virtual void TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits) = 0;
 
 	const std::string NodeName;
 protected:
@@ -35,7 +35,7 @@ public:
 	void RemoveNode(SceneNode* sn);
 
 	void Visualize(const glm::mat4& transform); // override
-	void TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot); // override
+	void TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits); // override
 protected:
 	std::vector<SceneNode*> groups;
 };
@@ -59,7 +59,7 @@ public:
 	//glm::mat4 GetTransform();
 
 	void Visualize(const glm::mat4& transform); // override
-	void TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot); // override
+	void TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits); // override
 private:
 	//glm::mat4 transform;
 };
@@ -76,7 +76,7 @@ public:
 	void SetShader(Shader* sd);
 
 	void Visualize(const glm::mat4& transform); // override
-	void TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot); // override
+	void TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits); // override
 
 protected:
 	Model m;

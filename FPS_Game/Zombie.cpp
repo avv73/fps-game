@@ -1,7 +1,8 @@
 #include "Zombie.h"
 #include "ZombieNode.h"
+#include <cmath>
 
-Zombie::Zombie(TransformNode* trN, Player* n)
+Zombie::Zombie(TransformNode* trN, Player* n, BulletEngine* bulletEngine)
 {
 	transformN = trN;
 	player = n;
@@ -10,6 +11,9 @@ Zombie::Zombie(TransformNode* trN, Player* n)
 	forwardVector = n->camera->pos - zombiePos;
 
 	health = 30;
+	shootYaw = -110.0 - YAW;
+
+	this->bulletEngine = bulletEngine;
 }
 
 void Zombie::SetSceneNode(ZombieNode* zombieN)
@@ -31,6 +35,24 @@ int Zombie::GetHealth()
 
 void Zombie::Update(float delta)
 {
+	if (health <= 0)
+		return;
+
+	shootTicks += delta;
+	lockTicks += delta;
+
+	if (lockTicks >= lockTicksMax)
+	{
+		previousForwardVector = forwardVector;
+		lockTicks = 0;
+	}
+
+	if (shootTicks >= shootTicksMax)
+	{
+		Shoot();
+		shootTicks = 0;
+	}
+
 	glm::vec3 currentVector = player->camera->pos - zombiePos;
 
 	float angle = glm::dot(forwardVector, currentVector) / (glm::length(currentVector) * glm::length(forwardVector));
@@ -49,13 +71,24 @@ void Zombie::Update(float delta)
 
 	angle = acos(angle);
 
-	if (hand.y > 0.001f)
+	if (hand.y >= 0.001f)
+	{
 		transformN->rotateAngleRad += angle;
+		shootYaw += glm::degrees(angle);
+	}
 	else if (hand.y < 0.001f)
+	{
 		transformN->rotateAngleRad -= angle;
+		shootYaw -= glm::degrees(angle);
+	}
 
 	forwardVector = currentVector;
 
 	//printf("%f\n", angle);
 	
+}
+
+void Zombie::Shoot()
+{
+	bulletEngine->Shoot(previousForwardVector, zombiePos, shootYaw, 0.0f);
 }

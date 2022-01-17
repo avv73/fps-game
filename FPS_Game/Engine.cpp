@@ -44,7 +44,7 @@ bool Engine::Init()
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf("SDL could not initialized! SDL Error: %s\n", SDL_GetError());
+		printf("SDL could not be initialized! SDL Error: %s\n", SDL_GetError());
 		success = false;
 	}
 	else
@@ -169,7 +169,7 @@ void Engine::CreateScene()
 	trZombie->rotateVector = glm::vec3(0.0f, 1.0f, 0.0f);
 	trZombie->rotateAngleRad = glm::radians(-170.0f);
 
-	Zombie* zombie = new Zombie(trZombie, player);
+	Zombie* zombie = new Zombie(trZombie, player, bulletEngine);
 	ZombieNode* zombieNode = new ZombieNode(zombie);
 
 	zombie->SetSceneNode(zombieNode);
@@ -317,13 +317,13 @@ void Engine::UpdateActions()
 
 	actionVector = glm::vec3(0.0f);
 
-	player->UpdateGravity(deltaTime);
-	bulletEngine->Update(deltaTime);
-
+	player->UpdateGravity(deltaTime); 
 	for (auto it = zombies.begin(); it != zombies.end(); ++it)
 	{
 		(*it)->Update(deltaTime);
 	}
+
+	bulletEngine->Update(deltaTime);
 }
 
 void Engine::HandleMouseMotion(const SDL_MouseMotionEvent& motion)

@@ -2,6 +2,7 @@
 #include "ShaderLibrary.h"
 #include <math.h>
 #include "BoundingObjects.h"
+#include "IDamageable.h"
 
 BulletEngine::BulletEngine(float clipX, float clipZ)
 	: ClipX(clipX), ClipZ(clipZ)
@@ -36,7 +37,7 @@ void BulletEngine::Shoot(glm::vec3 worldDirection, glm::vec3 origin, float yaw, 
 	blt.pitch = pitch;
 
 	std::vector<Intersection*> inters;
-	SceneGraph->TraverseIntersection(origin, worldDirection, inters, true);
+	SceneGraph->TraverseIntersection(origin, worldDirection, inters);
 
 	if (inters.size() > 0)
 	{
@@ -61,6 +62,12 @@ void BulletEngine::Shoot(glm::vec3 worldDirection, glm::vec3 origin, float yaw, 
 		printf("\n");
 
 		blt.intersectedNode = minIntersect->intersectedNode;
+
+		IDamageable* damageable = dynamic_cast<IDamageable*>(minIntersect->intersectedNode);
+		if (damageable != NULL)
+		{
+			damageable->DecreaseHealth();
+		}
 	}
 	else
 	{
@@ -86,10 +93,10 @@ void BulletEngine::Update(float delta)
 
 		// on each 20 frame, perform raycast from current bullet position
 		// if struck object doesn't match, clip bullet
-		if (clipCounter % 20 == 0 && (*it).intersectedNode != NULL)
+		if (deltaClip >= BulletRaycastThreshold && (*it).intersectedNode != NULL)
 		{
 			std::vector<Intersection*> inters;
-			SceneGraph->TraverseIntersection((*it).position, (*it).direction, inters, false);
+			SceneGraph->TraverseIntersection((*it).position, (*it).direction, inters);
 
 			if (inters.size() > 0)
 			{
@@ -113,23 +120,23 @@ void BulletEngine::Update(float delta)
 		}
 	}
 
-	clipCounter++;
-	if (clipCounter >= ClipThreshold)
+	if (deltaClip >= ClipThreshold)
 	{
 		FreeClippedBullets();
-		clipCounter = 0;
+		deltaClip = 0;
 	}
 
-	
+	deltaClip += delta;
 }
 
 void BulletEngine::FreeClippedBullets()
 {
-	for (auto it = shotBullets.begin(); it != shotBullets.end(); ++it)
+	for (int i = 0; i < shotBullets.size(); i++)
 	{
-		if (!(*it).clipped)
+		if (!shotBullets[i].clipped)
 			continue;
-		shotBullets.erase(it);
+
+		shotBullets.erase(shotBullets.begin() + i);
 	}
 }
 

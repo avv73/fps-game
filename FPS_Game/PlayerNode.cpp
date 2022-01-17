@@ -5,7 +5,7 @@ PlayerNode::PlayerNode(Player* pl)
 	: ModelNode("playerNode")
 {
 	this->pl = pl;
-	sphere = new BoundingSphere(this, pl->camera->pos, 0.5f);
+	sphere = new BoundingSphere(this, pl->camera->pos, 0.6f);
 }
 
 void PlayerNode::UpdateBoundingPosition(const glm::vec3& pos)
@@ -15,15 +15,20 @@ void PlayerNode::UpdateBoundingPosition(const glm::vec3& pos)
 
 void PlayerNode::Visualize(const glm::mat4& transform) { }
 
-void PlayerNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot)
+void PlayerNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits)
 {
-	ModelNode::TraverseIntersection(orig, dir, hits, isShot);
+	ModelNode::TraverseIntersection(orig, dir, hits);
 
-	if (hits.size() > 0 && isShot)
-	{
-		if (hits[hits.size() - 1]->intersectedNode == this) // ???????????????
-		{
-			this->pl->DecreaseHealth();
-		}
-	}
+	//if (hits.size() > 0)
+	//{
+	//	if (hits[hits.size() - 1]->intersectedNode == this) // ???????????????
+	//	{
+	//		this->pl->DecreaseHealth();
+	//	}
+	//}
+}
+
+void PlayerNode::DecreaseHealth()
+{
+	pl->DecreaseHealth();
 }

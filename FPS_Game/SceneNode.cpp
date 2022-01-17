@@ -55,12 +55,12 @@ void GroupNode::Visualize(const glm::mat4& transform) // override
 	}
 }
 
-void GroupNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot) // override
+void GroupNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits) // override
 {
 	intersectPath.push_back(this);
 	for (auto it = groups.begin(); it != groups.end(); ++it)
 	{
-		(*it)->TraverseIntersection(orig, dir, hits, isShot);
+		(*it)->TraverseIntersection(orig, dir, hits);
 	}
 	intersectPath.pop_back();
 }
@@ -127,12 +127,12 @@ void TransformNode::Visualize(const glm::mat4& transform) // override
 	}
 }
 
-void TransformNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot) // override
+void TransformNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits) // override
 {
 	intersectPath.push_back(this);
 	for (auto it = groups.begin(); it != groups.end(); ++it)
 	{
-		(*it)->TraverseIntersection(orig, dir, hits, isShot);
+		(*it)->TraverseIntersection(orig, dir, hits);
 	}
 	intersectPath.pop_back();
 }
@@ -181,7 +181,7 @@ void ModelNode::Visualize(const glm::mat4& transform)
 	m.Draw(*sdr);
 }
 
-void ModelNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot)
+void ModelNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits)
 {
 	// traverse intersection...
 	if (sphere == NULL)

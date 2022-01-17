@@ -97,14 +97,13 @@ void Player::SetPlayerNode(PlayerNode* plNode)
 
 void Player::DecreaseHealth()
 {
+	health--;
 	if (health == 0)
 	{
 		// game over
 		printf("GAME OVER!");
 		//exit(1);
 	}
-
-	health--;
 }
 
 int Player::GetHealth()

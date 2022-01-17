@@ -116,6 +116,9 @@
     <ClInclude Include="ZombieNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IDamageable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">

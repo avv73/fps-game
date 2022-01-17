@@ -14,16 +14,21 @@ void ZombieNode::Visualize(const glm::mat4& transform)
 	ModelNode::Visualize(transform);
 }
 
-void ZombieNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits, bool isShot)
+void ZombieNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir, std::vector<Intersection*>& hits)
 {
-	ModelNode::TraverseIntersection(orig, dir, hits, isShot);
+	ModelNode::TraverseIntersection(orig, dir, hits);
 
-	if (hits.size() > 0 && isShot)
+	/*if (hits.size() > 0)
 	{
 		if (hits[hits.size() - 1]->intersectedNode == this)
 		{
 			zombie->DecreaseHealth();
 		}
-	}
+	}*/
 
+}
+
+void ZombieNode::DecreaseHealth()
+{
+	zombie->DecreaseHealth();
 }
