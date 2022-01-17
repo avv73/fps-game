@@ -8,6 +8,7 @@ Zombie::Zombie(TransformNode* trN, Player* n, BulletEngine* bulletEngine)
 	player = n;
 
 	zombiePos = trN->translateVector;
+	zombiePos.y += 1.0f;
 	forwardVector = n->camera->pos - zombiePos;
 
 	health = 30;
@@ -74,12 +75,12 @@ void Zombie::Update(float delta)
 	if (hand.y >= 0.001f)
 	{
 		transformN->rotateAngleRad += angle;
-		shootYaw += glm::degrees(angle);
+		shootYaw -= glm::degrees(angle);
 	}
 	else if (hand.y < 0.001f)
 	{
 		transformN->rotateAngleRad -= angle;
-		shootYaw -= glm::degrees(angle);
+		shootYaw += glm::degrees(angle);
 	}
 
 	forwardVector = currentVector;
@@ -90,5 +91,6 @@ void Zombie::Update(float delta)
 
 void Zombie::Shoot()
 {
-	bulletEngine->Shoot(previousForwardVector, zombiePos, shootYaw, 0.0f);
+	glm::vec3 normalizedDir = glm::normalize(previousForwardVector);
+	bulletEngine->Shoot(normalizedDir, zombiePos, shootYaw, 0.0f);
 }

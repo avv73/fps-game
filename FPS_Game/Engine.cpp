@@ -18,7 +18,7 @@
 #include "Terrain.h"
 #include "ZombieNode.h"
 
-#define FPS_COUNT
+//#define FPS_COUNT
 
 Engine::Engine(Player* pl)
 	: player(pl)
@@ -160,9 +160,6 @@ void Engine::CreateScene()
 
 	rootNode->AddNode(pl);
 
-	ModelNode* cube = new ModelNode("cube", "./models/cube2/grass.obj");
-	TransformNode* tr = new TransformNode("transform_cube");
-
 	//ModelNode* zombie = new ModelNode("zombie", "./models/zombie/zombie.obj");
 	TransformNode* trZombie = new TransformNode("zombie_transf");
 	trZombie->translateVector = glm::vec3(1.0f, -1.0f, 3.0f);
@@ -176,11 +173,11 @@ void Engine::CreateScene()
 
 	ModelNode* crate = new ModelNode("crate", "./models/crate/Wooden Crate.obj");
 	TransformNode* trCrate = new TransformNode("crate_transf");
+	TransformNode* trCrate2 = new TransformNode("crate_transf2");
+	TransformNode* trCrate3 = new TransformNode("crate_transf3");
+	TransformNode* trCrate4 = new TransformNode("crate_transf4");
 
 	GroupNode* crates = new GroupNode("crates");
-
-	tr->translateVector = glm::vec3(2.0f, 2.0f, 2.0f);
-	tr->AddNode(cube);
 
 	trZombie->AddNode(zombieNode);
 
@@ -188,13 +185,27 @@ void Engine::CreateScene()
 	trCrate->scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
 	trCrate->AddNode(crate);
 
+	trCrate2->translateVector = glm::vec3(3.0f, -1.0f, -5.0f);
+	trCrate2->scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
+	trCrate2->AddNode(crate);
+
+	trCrate3->translateVector = glm::vec3(-4.0f, -1.0f, -6.0f);
+	trCrate3->scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
+	trCrate3->AddNode(crate);
+
+	trCrate4->translateVector = glm::vec3(0.0f, -1.0f, 12.0f);
+	trCrate4->scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
+	trCrate4->AddNode(crate);
+
 	crates->AddNode(trCrate);
+	crates->AddNode(trCrate2);
+	crates->AddNode(trCrate3);
+	crates->AddNode(trCrate4);
 
 	Terrain* terrain = new Terrain(glm::vec2(-20, -20), 40);
 	//Terrain* terrain = new Terrain(glm::vec2(0, 0), 2);
 
 	rootNode->AddNode(terrain);
-	rootNode->AddNode(tr);
 	rootNode->AddNode(trZombie);
 	rootNode->AddNode(crates);
 
@@ -351,88 +362,4 @@ void Engine::Close()
 	ShaderLibrary::GetInstance()->UnloadShaders();
 	// close program..
 	exit(0);
-}
-
-GLuint Engine::CreateCube(float width, GLuint& VBO)
-{
-	float vertices[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-		0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-
-		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-
-		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-		0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-
-
-	};
-
-	GLuint VAO;
-	glGenBuffers(1, &VBO);
-	glGenVertexArrays(1, &VAO);
-
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0); //the data comes from the currently bound GL_ARRAY_BUFFER
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-	glBindVertexArray(0);
-
-	return VAO;
-}
-
-void Engine::DrawCube(GLuint vaoID)
-{
-	//glUseProgram(cubeShader.ID);
-	glBindVertexArray(vaoID);
-
-	//glDrawElements uses the indices in the EBO to get to the vertices in the VBO
-	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glDrawArrays(GL_TRIANGLES, 0, 36); //36
-
-	glBindVertexArray(0);
 }

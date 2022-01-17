@@ -85,7 +85,7 @@ void Player::Shoot(BulletEngine* bEngine)
 
 	printf("Direction: %f %f %f\n", direction.x, direction.y, direction.z);
 
-	bEngine->Shoot(direction, orig, camera->yaw - YAW, camera->pitch); // lazy
+	bEngine->Shoot(direction, orig, camera->yaw + YAW, camera->pitch); // lazy
 
 	ammo--;
 }
@@ -102,7 +102,7 @@ void Player::DecreaseHealth()
 	{
 		// game over
 		printf("GAME OVER!");
-		//exit(1);
+		exit(1);
 	}
 }
 

@@ -41,7 +41,7 @@ void BulletEngine::Shoot(glm::vec3 worldDirection, glm::vec3 origin, float yaw, 
 
 	if (inters.size() > 0)
 	{
-		printf("===Intersected!\n");
+		//printf("===Intersected!\n");
 
 		// find minimum intersect
 		Intersection* minIntersect = inters[0];
@@ -57,9 +57,9 @@ void BulletEngine::Shoot(glm::vec3 worldDirection, glm::vec3 origin, float yaw, 
 		std::vector<SceneNode*> path = minIntersect->intersectionPath;
 		for (auto it = path.begin(); it != path.end(); ++it)
 		{
-			printf("->%s", (*it)->NodeName.c_str());
+			//printf("->%s", (*it)->NodeName.c_str());
 		}
-		printf("\n");
+		//printf("\n");
 
 		blt.intersectedNode = minIntersect->intersectedNode;
 

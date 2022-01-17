@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-const float YAW = -90.0f;
+const float YAW = 90.0f; // -90
 const float PITCH = 0.0f;
 const float SPEED = 3.0f; // 0.8f
 const float SENSITIVITY = 0.1f;

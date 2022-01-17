@@ -56,8 +56,6 @@ private:
 	void Render();
 
 	// DEBUG
-	GLuint CreateCube(float width, GLuint& VBO);
-	void DrawCube(GLuint vaoID);
 	//Shader cubeShader;
 	//GLuint cube;
 
