@@ -83,7 +83,7 @@ void Player::Shoot(BulletEngine* bEngine)
 	//orig.y += 0.2 * direction.y;
 	//orig.z += 0.2 * direction.z;
 
-	printf("Direction: %f %f %f\n", direction.x, direction.y, direction.z);
+	//printf("Direction: %f %f %f\n", direction.x, direction.y, direction.z);
 
 	bEngine->Shoot(direction, orig, camera->yaw + YAW, camera->pitch); // lazy
 

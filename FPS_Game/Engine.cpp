@@ -172,6 +172,9 @@ void Engine::CreateScene()
 	zombie->SetSceneNode(zombieNode);
 
 	ModelNode* crate = new ModelNode("crate", "./models/crate/Wooden Crate.obj");
+	ModelNode* crate2 = new ModelNode("crate", "./models/crate/Wooden Crate.obj");
+	ModelNode* crate3 = new ModelNode("crate", "./models/crate/Wooden Crate.obj");
+	ModelNode* crate4 = new ModelNode("crate", "./models/crate/Wooden Crate.obj");
 	TransformNode* trCrate = new TransformNode("crate_transf");
 	TransformNode* trCrate2 = new TransformNode("crate_transf2");
 	TransformNode* trCrate3 = new TransformNode("crate_transf3");
@@ -187,15 +190,15 @@ void Engine::CreateScene()
 
 	trCrate2->translateVector = glm::vec3(3.0f, -1.0f, -5.0f);
 	trCrate2->scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
-	trCrate2->AddNode(crate);
+	trCrate2->AddNode(crate2);
 
 	trCrate3->translateVector = glm::vec3(-4.0f, -1.0f, -6.0f);
 	trCrate3->scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
-	trCrate3->AddNode(crate);
+	trCrate3->AddNode(crate3);
 
 	trCrate4->translateVector = glm::vec3(0.0f, -1.0f, 12.0f);
 	trCrate4->scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
-	trCrate4->AddNode(crate);
+	trCrate4->AddNode(crate4);
 
 	crates->AddNode(trCrate);
 	crates->AddNode(trCrate2);
@@ -266,7 +269,7 @@ void Engine::Update()
 		const Uint8* keystates = SDL_GetKeyboardState(&count);
 		HandleKeyDown(keystates);
 
-		UpdateActions();
+		UpdateActions(); 
 
 		Render();
 
@@ -322,6 +325,12 @@ void Engine::HandleKeyDown(const Uint8* keystates)
 
 void Engine::UpdateActions()
 {
+	if (firstStart)
+	{
+		firstStart = false;
+		return;
+	}
+
 	player->Move(actionVector, deltaTime);
 	if (actionVector.y == 1.0f)
 		player->Jump();
@@ -335,6 +344,11 @@ void Engine::UpdateActions()
 	}
 
 	bulletEngine->Update(deltaTime);
+
+	for (auto it = zombies.begin(); it != zombies.end(); ++it)
+	{
+		(*it)->Update(deltaTime);
+	}
 }
 
 void Engine::HandleMouseMotion(const SDL_MouseMotionEvent& motion)

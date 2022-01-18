@@ -45,6 +45,8 @@ private:
 	bool Init();
 	bool InitGL();
 
+	bool firstStart = true;
+
 	void Close();
 
 	void CreateScene();
