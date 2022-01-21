@@ -32,8 +32,11 @@ private:
 	const float shootTicksMax = 3;
 	const float lockTicksMax = 1;
 
+	float fixedRot = 0.0f;
+
 	glm::vec3 forwardVector;
 	glm::vec3 previousForwardVector;
+	glm::vec3 rotationalVector;
 	glm::vec3 zombiePos;
 	//glm::vec3 hand;
 
