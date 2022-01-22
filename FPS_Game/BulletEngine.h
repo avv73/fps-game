@@ -44,7 +44,7 @@ private:
 
 	const float BulletVelocity = 100.0f; //30 dbg 100 real
 	const int ClipThreshold = 15.0f;
-	const float BulletRaycastThreshold = 1.0f;
+	const float BulletRaycastThreshold = 0.5f;
 
 	float deltaClip = 0.0f;
 

@@ -13,9 +13,11 @@ Zombie::Zombie(TransformNode* trN, Player* n, BulletEngine* bulletEngine)
 	rotationalVector = forwardVector;
 
 	health = 15;
-	shootYaw = -110.0 - YAW;
 
+	fixedYaw = -110.0 - YAW;
 	fixedRot = trN->rotateAngleRad;
+
+	shootYaw = 0.0f;
 
 	this->bulletEngine = bulletEngine;
 }
@@ -78,16 +80,18 @@ void Zombie::Update(float delta)
 	if (hand.y >= 0.001f)
 	{
 		transformN->rotateAngleRad = angle;
-		shootYaw -= glm::degrees(angle);
+		shootYaw = -glm::degrees(angle);
 	}
 	else if (hand.y < 0.001f)
 	{
 		transformN->rotateAngleRad = -angle;
-		shootYaw += glm::degrees(angle);
+		shootYaw = glm::degrees(angle); //
 	}
 
 	forwardVector = currentVector; 
+
 	transformN->rotateAngleRad += fixedRot;
+	shootYaw += fixedYaw;
 
 	//printf("%f\n", angle);
 	

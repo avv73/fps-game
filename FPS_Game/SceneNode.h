@@ -82,6 +82,7 @@ protected:
 	Model m;
 	Shader* sdr;
 	BoundingSphere* sphere = NULL;
+	//BoundingBox* box = NULL;
 private:
 	void LoadModelFromFile(const std::string& path);
 

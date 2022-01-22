@@ -30,9 +30,10 @@ private:
 	float lockTicks = 0;
 	float shootYaw = 0;
 	const float shootTicksMax = 3;
-	const float lockTicksMax = 1;
+	const float lockTicksMax = 0.5f;
 
 	float fixedRot = 0.0f;
+	float fixedYaw = 0.0f;
 
 	glm::vec3 forwardVector;
 	glm::vec3 previousForwardVector;

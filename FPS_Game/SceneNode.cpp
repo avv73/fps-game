@@ -84,31 +84,6 @@ TransformNode::TransformNode(const std::string& tr) : GroupNode(tr)
 	rotateAngleRad = 0.0f;
 }
 
-//void TransformNode::Rotate(glm::vec3 rtV, float angle)
-//{
-//	transform = glm::rotate(transform, glm::radians(angle), rtV);
-//}
-//
-//void TransformNode::Scale(glm::vec3 scV)
-//{
-//	transform = glm::scale(transform, scV);
-//}
-//
-//void TransformNode::Translate(glm::vec3 trV)
-//{
-//	transform = glm::translate(transform, trV);
-//}
-
-//void TransformNode::SetTransform(glm::mat4 tr)
-//{
-//	transform = tr;
-//}
-//
-//glm::mat4 TransformNode::GetTransform()
-//{
-//	return transform;
-//}
-
 void TransformNode::Visualize(const glm::mat4& transform) // override
 {
 	// stack matrices
@@ -151,7 +126,9 @@ ModelNode::ModelNode(const std::string& name, const std::string& path) : SceneNo
 ModelNode::~ModelNode()
 {
 	if (sphere != NULL)
+	//if (box != NULL)
 		delete sphere;
+		//delete box;
 }
 
 void ModelNode::SetShader(Shader* sd)
@@ -169,6 +146,7 @@ void ModelNode::LoadModelFromFile(const std::string& path)
 	m.LoadModel(path);
 	// create sphere
 	sphere = new BoundingSphere(this, m);
+	//box = new BoundingBox(this, m);
 }
 
 void ModelNode::Visualize(const glm::mat4& transform)
@@ -178,6 +156,7 @@ void ModelNode::Visualize(const glm::mat4& transform)
 	glm::mat3 normalMat = glm::transpose(glm::inverse(transform));
 	sdr->setMat3("normalMat", normalMat);
 	sphere->Transform(transform); // compromise, assume transform will not change when traversing for intersect since last visualize call
+	//box->Transform(transform);
 	m.Draw(*sdr);
 }
 
@@ -185,10 +164,12 @@ void ModelNode::TraverseIntersection(const glm::vec3& orig, const glm::vec3& dir
 {
 	// traverse intersection...
 	if (sphere == NULL)
+	//if (box == NULL)
 		return;
 
 	Intersection* hit = new Intersection();
 	if (sphere->CollidesWithRay(orig, dir, *hit))
+	//if (box->CollidesWithRay(orig, dir, *hit))
 	{
 		hit->intersectionPath = intersectPath;
 		hit->intersectionPath.push_back(this);

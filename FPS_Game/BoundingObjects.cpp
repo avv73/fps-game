@@ -133,3 +133,92 @@ bool BoundingSphere::CollidesWithRay(const glm::vec3& rayOrigin, const glm::vec3
 	hit.distance = t;
 }
 
+// =======================================================================
+// =======================================================================
+// =======================================================================
+
+BoundingBox::BoundingBox(ModelNode* gn)
+{
+	node = gn;
+}
+
+BoundingBox::BoundingBox(ModelNode* gn, const Model& model)
+{
+	node = gn;
+	float xmin, ymin, zmin, xmax, ymax, zmax;
+	xmin = xmax = model.meshes[0].vertices[0].Position.x;
+	ymin = ymax = model.meshes[0].vertices[0].Position.y;
+	zmin = zmax = model.meshes[0].vertices[0].Position.z;
+	for (unsigned int m = 0; m < model.meshes.size(); m++)
+	{
+		const Mesh& mesh = model.meshes[m];
+		for (unsigned int i = 1; i < mesh.vertices.size(); i++) //popalva masiva s vertexite
+		{
+			if (mesh.vertices[i].Position.x < xmin)
+				xmin = mesh.vertices[i].Position.x;
+			if (mesh.vertices[i].Position.x > xmax)
+				xmax = mesh.vertices[i].Position.x;
+			if (mesh.vertices[i].Position.y < ymin)
+				ymin = mesh.vertices[i].Position.y;
+			if (mesh.vertices[i].Position.y > ymax)
+				ymax = mesh.vertices[i].Position.y;
+			if (mesh.vertices[i].Position.z < zmin)
+				zmin = mesh.vertices[i].Position.z;
+			if (mesh.vertices[i].Position.z > zmax)
+				zmax = mesh.vertices[i].Position.z;
+		}
+	}
+
+	maxPoint = glm::vec3(xmax, ymax, zmax);
+	minPoint = glm::vec3(xmin, ymin, zmin);
+}
+
+void BoundingBox::Transform(const glm::mat4& model)
+{
+	minPointWorld = model * glm::vec4(minPoint, 1.0f);
+	maxPointWorld = model * glm::vec4(maxPoint, 1.0f);
+}
+
+bool BoundingBox::CollidesWithRay(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, Intersection& hit)
+{
+	float tmin = (minPointWorld.x - rayOrigin.x) / rayDirection.x;
+	float tmax = (maxPointWorld.x - rayOrigin.x) / rayDirection.x;
+
+	if (tmin > tmax) swap(tmin, tmax);
+
+	float tymin = (minPointWorld.y - rayOrigin.y) / rayDirection.y;
+	float tymax = (maxPointWorld.y - rayOrigin.y) / rayDirection.y;
+
+	if (tymin > tymax) swap(tymin, tymax);
+
+	if (tmin > tymax || tymin > tmax)
+		return false;
+
+	if (tymin > tmin)
+		tmin = tymin;
+
+	if (tymax < tmax)
+		tmax = tymax;
+
+	float tzmin = (minPointWorld.z - rayOrigin.z) / rayDirection.z;
+	float tzmax = (maxPointWorld.z - rayOrigin.z) / rayDirection.z;
+
+	if (tzmin > tzmax) swap(tzmin, tzmax);
+
+	if ((tmin > tzmax) || (tzmin > tmax))
+		return false;
+
+	if (tzmin > tmin)
+		tmin = tzmin;
+
+	if (tzmax < tmax)
+		tmax = tzmax;
+
+	hit.point = rayOrigin + rayDirection * glm::vec3(tmin, tymin, tzmin);
+	hit.intersectedNode = node;
+	hit.distance = tmin; // incorrect distance
+
+	return true;
+}
+
+

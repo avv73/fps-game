@@ -91,7 +91,7 @@ void BulletEngine::Update(float delta)
 			continue;
 		}
 
-		// on each 20 frame, perform raycast from current bullet position
+		// perform raycast from current bullet position
 		// if struck object doesn't match, clip bullet
 		if (deltaClip >= BulletRaycastThreshold && (*it).intersectedNode != NULL)
 		{

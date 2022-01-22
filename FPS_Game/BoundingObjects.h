@@ -60,4 +60,24 @@ public:
 	bool CollidesWithRay(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, Intersection& hit);
 };
 
+class BoundingBox : public IBoundingVolume
+{
+private:
+	glm::vec3 minPoint;
+	glm::vec3 maxPoint;
+protected:
+	ModelNode* node;
+public:
+	BoundingBox(ModelNode* gn);
+
+	BoundingBox(ModelNode* gn, const Model& model);
+
+	void Transform(const glm::mat4& model);
+
+	bool CollidesWithRay(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, Intersection& hit);
+
+	glm::vec3 minPointWorld;
+	glm::vec3 maxPointWorld;
+};
+
 #endif
