@@ -21,7 +21,7 @@ The objective is to kill the zombie, but the zombie shoots the player at fixed i
 Scene configuration can be modified in the `void Engine::CreateScene()` method. Keep in mind how the scene graph is set up; each node should be linked to root node manually.
 
 ## Additional functionality to be added/fixed
-I would really appriciate any contributions to the game - many of the things are implemented very straightforward (tried to reuse as much code from the lectures as I can) and if you have any ideas, you can always hit me up. 
+I would really appreciate any contributions to the game - many of the things are implemented very straightforward (tried to reuse as much code from the lectures as I can) and if you have any ideas, you can always hit me up. 
 
 - [ ] - **Custom math library** - Should improve performance somewhat.
 - [ ] - **Improved scene graph implementation**
